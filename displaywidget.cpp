@@ -102,4 +102,5 @@ void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
 
 void DisplayWidget::clear() {
     m_controlPoints.clear();
+    repaint();
 }

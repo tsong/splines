@@ -5,6 +5,7 @@
 #define MAIN_WINDOW_DEFAULT_HEIGHT 480
 
 #include <QMainWindow>
+#include <QUndoStack>
 #include "displaywidget.h"
 
 
@@ -21,6 +22,8 @@ protected:
 protected:
     //surface which users interact with and draw the points
     DisplayWidget *displayWidget;
+
+    QUndoStack *undoStack;
 };
 
 #endif // MAINWINDOW_H
