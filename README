@@ -1,0 +1,35 @@
+===============================================================================
+                                    SPLINES
+===============================================================================
+
+===================
+      Author
+===================
+
+Tim Song
+timsong@uvic.ca
+
+===================
+     Overview
+===================
+
+This program demos B Splines, allowing you to play around with different basis
+functions.
+
+===================
+      Usage
+===================
+
+Left click on the canvas to add a new vertex.
+Left click and drag a vertex to move it.
+Right click on a vertex to delete it.
+The canvas can be cleared using the "Clear" menu item under "Edit".
+
+===================
+     Build
+===================
+
+This program was built using Qt 4.7.0. After installing the framework, run
+> qmake
+> make
+to build the program.
