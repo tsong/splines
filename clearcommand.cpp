@@ -14,8 +14,8 @@ int ClearCommand::id() const {
     return CLEAR_COMMAND_ID;
 }
 
-bool ClearCommand::mergeWith(const QUndoCommand *) {
-    return false;
+bool ClearCommand::mergeWith(const QUndoCommand *other) {
+    return other->id() == id();
 }
 
 void ClearCommand::redo() {

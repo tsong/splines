@@ -12,7 +12,7 @@
 #include "movepointcommand.h"
 #include "clearcommand.h"
 
-#define POINT_RADIUS 8
+#define POINT_RADIUS 6
 
 using namespace std;
 
