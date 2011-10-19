@@ -47,9 +47,9 @@ void DisplayWidget::paintGL() {
     //draw control points
     if (m_showControlPoints) {
         glColor3f(0,0,0);
-        for (list<Vector2f>::iterator it = m_controlPoints.begin(); it != m_controlPoints.end(); it++) {
-            Vector2f v = *it;
-            if (m_selected && m_selectedIterator == it) {
+        for (uint i = 0; i < m_controlPoints.size(); i++) {
+            Vector2f v = m_controlPoints[i];
+            if (m_selected && m_selectedIndex == i) {
                 glColor3f(0,0,1);
                 glDrawCircle(v[0], v[1], POINT_RADIUS);
                 glColor3f(0,0,0);
@@ -66,23 +66,24 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
 
     //iterate through vertices and see if point clicked is inside a vertex
     m_selected = false;
-    for (list<Vector2f>::iterator it = m_controlPoints.begin(); it != m_controlPoints.end(); it++) {
-        Vector2f v = *it;
+    for (uint i = 0; i < m_controlPoints.size(); i++) {
+        Vector2f v = m_controlPoints[i];
         if (abs(v[0]-x) <= POINT_RADIUS && abs(v[1]-y) <= POINT_RADIUS) {
             m_selected = true;
-            m_selectedIterator = it;
+            m_selectedIndex = i;
             break;
         }
     }
 
     if (m_selected && event->button() == Qt::RightButton) {
         //remove vertex if right mouse button is clicked
-        m_controlPoints.erase(m_selectedIterator);
+        //m_controlPoints.erase(m_selectedIterator);
+        DeletePointCommand *deletePointCommand = new DeletePointCommand(m_selectedIndex, *this);
+        m_undoStack->push(deletePointCommand);
         m_selected = false;
     } else if (!m_selected && event->button() == Qt::LeftButton) {
         //add a new control point if left mouse button is clicked
         Vector2f v(x,y);
-        //m_controlPoints.push_back(v);
         AddPointCommand *addPointCommand = new AddPointCommand(v, *this);
         m_undoStack->push(addPointCommand);
     }
@@ -94,7 +95,7 @@ void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
     if (m_selected) {
         float x = (float)event->x();
         float y = (float)event->y();
-        *m_selectedIterator = Vector2f(x,y);
+        m_controlPoints[m_selectedIndex] = Vector2f(x,y);
 
         repaint();
     }

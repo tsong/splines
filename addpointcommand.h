@@ -1,5 +1,5 @@
-#ifndef ADDCOMMAND_H
-#define ADDCOMMAND_H
+#ifndef ADDPOINTCOMMAND_H
+#define ADDPOINTCOMMAND_H
 
 #include <QUndoCommand>
 #include "vector.h"
@@ -28,4 +28,4 @@ protected:
 
 };
 
-#endif // ADDCOMMAND_H
+#endif // ADDPOINTCOMMAND_H

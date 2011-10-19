@@ -15,7 +15,9 @@ SOURCES += main.cpp\
     displaywidget.cpp \
     glutils.cpp \
     pointsutil.cpp \
-    addpointcommand.cpp
+    addpointcommand.cpp \
+    deletepointcommand.cpp \
+    clearcommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -23,7 +25,9 @@ HEADERS  += mainwindow.h \
     vector.h \
     glutils.h \
     pointsutil.h \
-    addpointcommand.h
+    addpointcommand.h \
+    deletepointcommand.h \
+    clearcommand.h
 
 FORMS    +=
 

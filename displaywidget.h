@@ -7,12 +7,11 @@
 
 #include "vector.h"
 #include "addpointcommand.h"
+#include "deletepointcommand.h"
 
 #define POINT_RADIUS 8
 
 using namespace std;
-
-class AddPointCommand;
 
 class DisplayWidget : public QGLWidget {
     Q_OBJECT
@@ -21,6 +20,7 @@ public:
     ~DisplayWidget();
 
     friend class AddPointCommand;
+    friend class DeletePointCommand;
 
 public slots:
     //clears all control points
@@ -41,11 +41,11 @@ protected:
     QUndoStack *m_undoStack;
 
     bool m_showControlPoints;
-    list<Vector2f> m_controlPoints;
+    vector<Vector2f> m_controlPoints;
 
     //tracks selected vertex for movement
     bool m_selected;
-    list<Vector2f>::iterator m_selectedIterator;
+    uint m_selectedIndex;
 };
 
 #endif // DISPLAYWIDGET_H
