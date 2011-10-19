@@ -3,18 +3,24 @@
 
 #include <QGLWidget>
 #include <QMouseEvent>
+#include <QUndoStack>
 
 #include "vector.h"
+#include "addpointcommand.h"
 
 #define POINT_RADIUS 8
 
 using namespace std;
 
+class AddPointCommand;
+
 class DisplayWidget : public QGLWidget {
     Q_OBJECT
 public:
-    DisplayWidget(QWidget *parent = 0);
+    DisplayWidget(QWidget *parent = 0, QUndoStack *undoStack = 0);
     ~DisplayWidget();
+
+    friend class AddPointCommand;
 
 public slots:
     //clears all control points
@@ -32,6 +38,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *);
 
 protected:
+    QUndoStack *m_undoStack;
+
     bool m_showControlPoints;
     list<Vector2f> m_controlPoints;
 

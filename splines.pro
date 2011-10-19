@@ -14,14 +14,16 @@ SOURCES += main.cpp\
     mainwindow.cpp \
     displaywidget.cpp \
     glutils.cpp \
-    pointsutil.cpp
+    pointsutil.cpp \
+    addpointcommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
     matrix.h \
     vector.h \
     glutils.h \
-    pointsutil.h
+    pointsutil.h \
+    addpointcommand.h
 
 FORMS    +=
 

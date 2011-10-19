@@ -4,9 +4,12 @@
 
 //#define ABS(x) (x < 0 ? -x : x)
 
-DisplayWidget::DisplayWidget(QWidget *parent) :
-    QGLWidget(parent), m_showControlPoints(true)
+DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack) :
+    QGLWidget(parent), m_undoStack(undoStack), m_showControlPoints(true)
 {
+    if (!undoStack) {
+        undoStack = new QUndoStack(this);
+    }
 }
 
 DisplayWidget::~DisplayWidget() {}
@@ -79,7 +82,9 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
     } else if (!m_selected && event->button() == Qt::LeftButton) {
         //add a new control point if left mouse button is clicked
         Vector2f v(x,y);
-        m_controlPoints.push_back(v);
+        //m_controlPoints.push_back(v);
+        AddPointCommand *addPointCommand = new AddPointCommand(v, *this);
+        m_undoStack->push(addPointCommand);
     }
 
     repaint();

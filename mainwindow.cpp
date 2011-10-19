@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), displayWidget(0), undoStack(0)
 {
     undoStack = new QUndoStack(this);
-    displayWidget = new DisplayWidget(parent);
+    displayWidget = new DisplayWidget(parent, undoStack);
     this->setCentralWidget(displayWidget);
 
     createMenus();
