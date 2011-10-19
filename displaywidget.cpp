@@ -50,7 +50,7 @@ void DisplayWidget::paintGL() {
         for (uint i = 0; i < m_controlPoints.size(); i++) {
             Vector2f v = m_controlPoints[i];
             if (m_selected && m_selectedIndex == i) {
-                glColor3f(0,0,1);
+                glColor3f(1,0,0);
                 glDrawCircle(v[0], v[1], POINT_RADIUS);
                 glColor3f(0,0,0);
             }else {
@@ -86,6 +86,9 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
         Vector2f v(x,y);
         AddPointCommand *addPointCommand = new AddPointCommand(v, *this);
         m_undoStack->push(addPointCommand);
+    } else {
+        //generate a new id for this point movement command
+        m_moveCommandId = rand();
     }
 
     repaint();
@@ -95,8 +98,11 @@ void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
     if (m_selected) {
         float x = (float)event->x();
         float y = (float)event->y();
-        m_controlPoints[m_selectedIndex] = Vector2f(x,y);
+        Vector2f v(x,y);
+        //m_controlPoints[m_selectedIndex] = Vector2f(x,y);
 
+        MovePointCommand *movePointCommand = new MovePointCommand(m_moveCommandId, m_selectedIndex, v, *this);
+        m_undoStack->push(movePointCommand);
         repaint();
     }
 }

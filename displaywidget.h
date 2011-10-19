@@ -6,8 +6,10 @@
 #include <QUndoStack>
 
 #include "vector.h"
+
 #include "addpointcommand.h"
 #include "deletepointcommand.h"
+#include "movepointcommand.h"
 #include "clearcommand.h"
 
 #define POINT_RADIUS 8
@@ -22,6 +24,7 @@ public:
 
     friend class AddPointCommand;
     friend class DeletePointCommand;
+    friend class MovePointCommand;
     friend class ClearCommand;
 
 public slots:
@@ -48,6 +51,7 @@ protected:
     //tracks selected vertex for movement
     bool m_selected;
     uint m_selectedIndex;
+    int m_moveCommandId;
 };
 
 #endif // DISPLAYWIDGET_H
