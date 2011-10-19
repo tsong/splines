@@ -24,7 +24,6 @@ public:
 
 protected:
     Vector2f m_point;
-    list<Vector2f>::iterator m_insertIterator;
     DisplayWidget &m_displayWidget;
 
 };
