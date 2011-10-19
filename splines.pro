@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     addpointcommand.cpp \
     deletepointcommand.cpp \
     clearcommand.cpp \
-    movepointcommand.cpp
+    movepointcommand.cpp \
+    basiswidget.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     addpointcommand.h \
     deletepointcommand.h \
     clearcommand.h \
-    movepointcommand.h
+    movepointcommand.h \
+    basiswidget.h
 
 FORMS    +=
 

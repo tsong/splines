@@ -2,15 +2,28 @@
 #include <QDebug>
 #include <QMenu>
 #include <QMenuBar>
+#include <QSplitter>
+
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), displayWidget(0), undoStack(0)
 {
     undoStack = new QUndoStack(this);
-    displayWidget = new DisplayWidget(parent, undoStack);
-    this->setCentralWidget(displayWidget);
-
+    displayWidget = new DisplayWidget(this, undoStack);
+    basisWidget = new BasisWidget(this);
     createMenus();
+
+    //create splitter
+    QSplitter *splitter = new QSplitter(Qt::Vertical, this);
+    splitter->addWidget(displayWidget);
+    splitter->addWidget(basisWidget);
+    splitter->setStretchFactor(0,6);
+    splitter->setStretchFactor(1,3);
+
+
+    this->setCentralWidget(splitter);
+
 
     resize(MAIN_WINDOW_DEFAULT_WIDTH, MAIN_WINDOW_DEFAULT_HEIGHT);
 }
