@@ -107,6 +107,6 @@ void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void DisplayWidget::clear() {
-    m_controlPoints.clear();
+    m_undoStack->push(new ClearCommand(*this));
     repaint();
 }

@@ -8,6 +8,7 @@
 #include "vector.h"
 #include "addpointcommand.h"
 #include "deletepointcommand.h"
+#include "clearcommand.h"
 
 #define POINT_RADIUS 8
 
@@ -21,6 +22,7 @@ public:
 
     friend class AddPointCommand;
     friend class DeletePointCommand;
+    friend class ClearCommand;
 
 public slots:
     //clears all control points
