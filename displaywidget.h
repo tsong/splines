@@ -29,11 +29,14 @@ public:
     friend class MovePointCommand;
     friend class ClearCommand;
 
+signals:
+    void pointsChanged(const vector<Vector2f> &points);
+
 public slots:
     //clears all control points
     void clear();
 
-    void setKnots(vector<float> knots);
+    void setKnots(const vector<float> &knots);
 
 protected:
     /*OpenGL events*/

@@ -131,35 +131,42 @@ void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
 
 void DisplayWidget::clear() {
     m_undoStack->push(new ClearCommand(*this));
+    emit pointsChanged(m_controlPoints);
     repaint();
 }
 
-void DisplayWidget::setKnots(vector<float> knots) {
+void DisplayWidget::setKnots(const vector<float> &knots) {
     m_knots = knots;
+    repaint();
 }
 
 void DisplayWidget::insertPoint(uint i, Vector2f point) {
     m_controlPoints.insert(m_controlPoints.begin() + i, point);
+    emit pointsChanged(m_controlPoints);
     repaint();
 }
 
 void DisplayWidget::deletePoint(uint i) {
     m_controlPoints.erase(m_controlPoints.begin() + i);
+    emit pointsChanged(m_controlPoints);
     repaint();
 }
 
 void DisplayWidget::movePoint(uint i, Vector2f point) {
     m_controlPoints[i] = point;
+    //emit pointsChanged(m_controlPoints);
     repaint();
 }
 
 void DisplayWidget::clearAllPoints() {
     m_controlPoints.clear();
+    emit pointsChanged(m_controlPoints);
     repaint();
 }
 
 void DisplayWidget::setPoints(vector<Vector2f> points) {
     m_controlPoints = points;
+    emit pointsChanged(m_controlPoints);
     repaint();
 }
 

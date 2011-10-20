@@ -21,7 +21,10 @@ public:
     bool moveKnot(uint position, float newKnot);
 
 signals:
-    void knotsChanged(vector<float> knots);
+    void knotsChanged(const vector<float> &knots);
+
+public slots:
+    void createKnots(const vector<Vector2f> &controlPoints);
 
 protected:
     /*OpenGL events*/

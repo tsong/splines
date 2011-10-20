@@ -34,8 +34,8 @@ void drawBSpline(const vector<Vector2f> &points, const vector<float> &u) {
     for (uint i = 0; i + k-1 < n; i++) {
         glBegin(GL_LINE_STRIP);
 
-        float t = i + k - 1;
-        while (t <= i + k) { //go from u[x] to u[x + 1] where x is the current knot
+        float t = u[i + k - 1];
+        while (t <= u[i + k]) { //go from u[x] to u[x + 1] where x is the current knot
             Vector2f p(0,0);
             for (uint j = 0; j < k; j++) {
                 float res = deBoorCox(u, i+j, k, t);

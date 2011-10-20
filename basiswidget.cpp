@@ -10,9 +10,9 @@
 BasisWidget::BasisWidget(QWidget *parent) :
     QGLWidget(parent), m_order(1), m_isKnotSelected(false)
 {
-    for (uint i = 0; i < 10; i++) {
+    /*for (uint i = 0; i < 10; i++) {
         m_knots.push_back(i);
-    }
+    }*/
     m_order = 3;
 }
 
@@ -159,6 +159,7 @@ void BasisWidget::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void BasisWidget::updateProjection() {
+    makeCurrent();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -211,4 +212,19 @@ bool BasisWidget::moveKnot(uint position, float newKnot) {
 
     m_knots[position] = newKnot;
     return true;
+}
+
+void BasisWidget::createKnots(const vector<Vector2f> &controlPoints) {
+    m_knots.clear();
+
+    if (controlPoints.size() > 0) {
+        for (uint i = 0; i < controlPoints.size() + m_order; i++) {
+            m_knots.push_back(i);
+        }
+    }
+
+    updateProjection();
+
+    emit knotsChanged(m_knots);
+    repaint();
 }
