@@ -4,7 +4,7 @@
 #include <QMenuBar>
 #include <QSplitter>
 
-#include <QPushButton>
+#include "orderaction.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), displayWidget(0), undoStack(0)
@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     splitter->addWidget(basisWidget);
     splitter->setStretchFactor(0,6);
     splitter->setStretchFactor(1,3);
-
 
     this->setCentralWidget(splitter);
 
@@ -57,5 +56,15 @@ void MainWindow::createMenus() {
     QAction *redoAction = undoStack->createRedoAction(this);
     redoAction->setShortcut(QKeySequence("Shift+Ctrl+Z"));
     editMenu->addAction(redoAction);
+
+    //order menu
+    QMenu *orderMenu = menuBar()->addMenu("&Order");
+    for (uint i = 2; i < 7; i++) {
+        OrderAction *orderAction = new OrderAction(i, QString("&%1").arg(i), this);
+        connect(orderAction, SIGNAL(triggered(uint)), displayWidget, SLOT(setOrder(uint)));
+        connect(orderAction, SIGNAL(triggered(uint)), basisWidget, SLOT(setOrder(uint)));
+        orderAction->setShortcut(QString("Ctrl+%1").arg(i));
+        orderMenu->addAction(orderAction);
+    }
 }
 

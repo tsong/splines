@@ -26,8 +26,9 @@ void glDrawCircle(float x, float y, float r) {
 }
 
 
-void drawBSpline(const vector<Vector2f> &points, const vector<float> &u) {
-    uint k = 3;
+void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uint order) {
+    const vector<float> &u = knots;
+    uint k = order;
     uint n = points.size();
 
     //draw each segment

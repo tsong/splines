@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     deletepointcommand.cpp \
     clearcommand.cpp \
     movepointcommand.cpp \
-    basiswidget.cpp
+    basiswidget.cpp \
+    orderaction.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     deletepointcommand.h \
     clearcommand.h \
     movepointcommand.h \
-    basiswidget.h
+    basiswidget.h \
+    orderaction.h
 
 FORMS    +=
 

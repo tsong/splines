@@ -14,7 +14,7 @@ using namespace std;
 void glDrawCircle(float x, float y, float r);
 
 //draws a B spline with
-void drawBSpline(const vector<Vector2f> &points, const vector<float> &u);
+void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uint order);
 
 float deBoorCox(const vector<float> &u, uint i, uint k, float t);
 

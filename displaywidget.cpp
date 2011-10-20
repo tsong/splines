@@ -5,7 +5,8 @@
 //#define ABS(x) (x < 0 ? -x : x)
 
 DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack) :
-    QGLWidget(parent), m_undoStack(undoStack), m_showControlPoints(true)
+    QGLWidget(parent), m_undoStack(undoStack), m_showControlPoints(true),
+    m_showControlLines(true), m_order(3)
 {
     if (!undoStack) {
         undoStack = new QUndoStack(this);
@@ -64,17 +65,20 @@ void DisplayWidget::paintGL() {
         }
     }
 
-    glEnable(GL_LINE_STIPPLE);
-    glLineStipple(1,0x1111);
-    glBegin(GL_LINE_STRIP);
-    for (uint i = 0; i < m_controlPoints.size(); i++) {
-        Vector2f v = m_controlPoints[i];
-        glVertex2f(v[0],v[1]);
+    //draw control lines
+    if (m_showControlLines) {
+        glEnable(GL_LINE_STIPPLE);
+        glLineStipple(1,0x1111);
+        glBegin(GL_LINE_STRIP);
+        for (uint i = 0; i < m_controlPoints.size(); i++) {
+            Vector2f v = m_controlPoints[i];
+            glVertex2f(v[0],v[1]);
+        }
+        glEnd();
+        glDisable(GL_LINE_STIPPLE);
     }
-    glEnd();
-    glDisable(GL_LINE_STIPPLE);
 
-    drawBSpline(m_controlPoints, m_knots);
+    drawBSpline(m_controlPoints, m_knots, m_order);
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
@@ -126,6 +130,11 @@ void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
     m_selected = false;
+    repaint();
+}
+void DisplayWidget::setOrder(uint order) {
+    if (order > 0)
+        m_order = order;
     repaint();
 }
 

@@ -37,6 +37,7 @@ public slots:
     void clear();
 
     void setKnots(const vector<float> &knots);
+    void setOrder(uint order);
 
 protected:
     /*OpenGL events*/
@@ -59,9 +60,11 @@ protected:
     QUndoStack *m_undoStack;
 
     bool m_showControlPoints;
+    bool m_showControlLines;
     vector<Vector2f> m_controlPoints;
 
     vector<float> m_knots;
+    uint m_order;
 
     //tracks selected vertex for movement
     bool m_selected;

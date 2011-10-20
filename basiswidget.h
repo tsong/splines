@@ -14,7 +14,6 @@ public:
     BasisWidget(QWidget *parent = 0);
     ~BasisWidget();
 
-    void setOrder(uint order);
     void setKnots(vector<float> knots);
     void addKnot(float knot);
     bool removeKnot(uint position);
@@ -24,6 +23,7 @@ signals:
     void knotsChanged(const vector<float> &knots);
 
 public slots:
+    void setOrder(uint order);
     void createKnots(const vector<Vector2f> &controlPoints);
 
 protected:

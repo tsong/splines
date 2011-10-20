@@ -8,12 +8,8 @@
 #define PADDING 0.05
 
 BasisWidget::BasisWidget(QWidget *parent) :
-    QGLWidget(parent), m_order(1), m_isKnotSelected(false)
+    QGLWidget(parent), m_order(3), m_isKnotSelected(false)
 {
-    /*for (uint i = 0; i < 10; i++) {
-        m_knots.push_back(i);
-    }*/
-    m_order = 3;
 }
 
 BasisWidget::~BasisWidget() {}
@@ -184,7 +180,9 @@ void BasisWidget::getControlTriangle(uint i, Vector2f &v1, Vector2f &v2, Vector2
 }
 
 void BasisWidget::setOrder(uint order) {
-    m_order = order;
+    if (order > 0)
+        m_order = order;
+    repaint();
 }
 
 void BasisWidget::setKnots(vector<float> knots) {
