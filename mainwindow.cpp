@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     basisWidget = new BasisWidget(this);
     createMenus();
 
+    connect(basisWidget, SIGNAL(knotsChanged(vector<float>)), displayWidget, SLOT(setKnots(vector<float>)));
+
     //create splitter
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     splitter->addWidget(displayWidget);

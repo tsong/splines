@@ -19,14 +19,16 @@ bool DeletePointCommand::mergeWith(const QUndoCommand *) {
 }
 
 void DeletePointCommand::redo() {
-    vector<Vector2f> &points = m_displayWidget.m_controlPoints;
-    m_displayWidget.m_controlPoints.erase(points.begin() + m_position);
-    m_displayWidget.repaint();
+    //vector<Vector2f> &points = m_displayWidget.m_controlPoints;
+    //m_displayWidget.m_controlPoints.erase(points.begin() + m_position);
+    //m_displayWidget.repaint();
+    m_displayWidget.deletePoint(m_position);
 }
 
 void DeletePointCommand::undo() {
-    vector<Vector2f> &points = m_displayWidget.m_controlPoints;
-    points.insert(points.begin() + m_position, m_point);
-    m_displayWidget.repaint();
+    //vector<Vector2f> &points = m_displayWidget.m_controlPoints;
+    //points.insert(points.begin() + m_position, m_point);
+    //m_displayWidget.repaint();
+    m_displayWidget.insertPoint(m_position, m_point);
 }
 

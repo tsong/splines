@@ -10,6 +10,10 @@ DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack) :
     if (!undoStack) {
         undoStack = new QUndoStack(this);
     }
+
+    for (uint i = 0; i < 10000; i++) {
+        m_knots.push_back(i);
+    }
 }
 
 DisplayWidget::~DisplayWidget() {}
@@ -39,9 +43,6 @@ void DisplayWidget::resizeGL(int width, int height) {
 
     glMatrixMode(GL_MODELVIEW);
 }
-
-void BSpline(vector<Vector2f> points);
-float N(uint i, uint k, float t);
 
 void DisplayWidget::paintGL() {
     //clear
@@ -73,74 +74,7 @@ void DisplayWidget::paintGL() {
     glEnd();
     glDisable(GL_LINE_STIPPLE);
 
-    /*float STEP = 1E-3;
-    for (uint i = 3; i < m_controlPoints.size(); i += 3) {
-        vector<Vector2f> &CP = m_controlPoints;
-        Vector2f P[] = {CP[i-3], CP[i-2], CP[i-1], CP[i-0]};
-
-        glBegin(GL_LINE_STRIP);
-        glVertex2f(P[0][0],P[0][1]);
-        glVertex2f(P[1][0],P[1][1]);
-        glVertex2f(P[2][0],P[2][1]);
-        glVertex2f(P[3][0],P[3][1]);
-        glEnd();
-
-        glBegin(GL_LINE_STRIP);
-        float t = 0;
-        while (t <= 1) {
-            float x = P[0][0]*(1-t)*(1-t)*(1-t) + P[1][0]*3*t*(1-t)*(1-t) + P[2][0]*3*t*t*(1-t) + P[3][0]*t*t*t;
-            float y = P[0][1]*(1-t)*(1-t)*(1-t) + P[1][1]*3*t*(1-t)*(1-t) + P[2][1]*3*t*t*(1-t) + P[3][1]*t*t*t;
-
-            glVertex2f(x,y);
-            t += STEP;
-        }
-        glEnd();
-
-    }*/
-
-    BSpline(m_controlPoints);
-}
-
-float u[10000];
-
-void BSpline(vector<Vector2f> points) {
-    for (uint i = 0; i < 10000; i++) {
-        u[i] = i;
-    }
-
-    uint k = 3;
-    uint n = points.size();
-    float STEP = 5E-3;
-
-    //draw each segment
-    for (uint i = 0; i + k-1 < n; i++) {
-        glBegin(GL_LINE_STRIP);
-
-        float t = i + k - 1;
-        while (t <= i + k) { //go from u[x] to u[x + 1] where x is the current knot
-            Vector2f p(0,0);
-            for (uint j = 0; j < k; j++) {
-                float res = N(i+j, k, t);
-                p[0] += points[i+j][0]*res;
-                p[1] += points[i+j][1]*res;
-            }
-
-            glVertex2f(p[0],p[1]);
-            t += STEP;
-        }
-        glEnd();
-    }
-}
-
-float N(uint i, uint k, float t) {
-    if (k == 1) {
-        return t >= u[i] && t < u[i+1] ? 1 : 0; //strict lower bound???
-    }
-
-    float N1 = N(i,k-1,t);
-    float N2 = N(i+1,k-1,t);
-
-    return (t-u[i])/(u[i+k-1]-u[i])*N1 + (u[i+k]-t)/(u[i+k]-u[i+1])*N2;
+    drawBSpline(m_controlPoints, m_knots);
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
@@ -199,3 +133,37 @@ void DisplayWidget::clear() {
     m_undoStack->push(new ClearCommand(*this));
     repaint();
 }
+
+void DisplayWidget::setKnots(vector<float> knots) {
+    m_knots = knots;
+}
+
+void DisplayWidget::insertPoint(uint i, Vector2f point) {
+    m_controlPoints.insert(m_controlPoints.begin() + i, point);
+    repaint();
+}
+
+void DisplayWidget::deletePoint(uint i) {
+    m_controlPoints.erase(m_controlPoints.begin() + i);
+    repaint();
+}
+
+void DisplayWidget::movePoint(uint i, Vector2f point) {
+    m_controlPoints[i] = point;
+    repaint();
+}
+
+void DisplayWidget::clearAllPoints() {
+    m_controlPoints.clear();
+    repaint();
+}
+
+void DisplayWidget::setPoints(vector<Vector2f> points) {
+    m_controlPoints = points;
+    repaint();
+}
+
+uint DisplayWidget::numberOfPoints() {
+    return m_controlPoints.size();
+}
+

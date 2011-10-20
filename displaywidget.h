@@ -22,6 +22,8 @@ public:
     DisplayWidget(QWidget *parent = 0, QUndoStack *undoStack = 0);
     ~DisplayWidget();
 
+    uint numberOfPoints();
+
     friend class AddPointCommand;
     friend class DeletePointCommand;
     friend class MovePointCommand;
@@ -30,6 +32,8 @@ public:
 public slots:
     //clears all control points
     void clear();
+
+    void setKnots(vector<float> knots);
 
 protected:
     /*OpenGL events*/
@@ -42,11 +46,19 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
+    void insertPoint(uint i, Vector2f point);
+    void deletePoint(uint i);
+    void movePoint(uint i, Vector2f point);
+    void clearAllPoints();
+    void setPoints(vector<Vector2f> points);
+
 protected:
     QUndoStack *m_undoStack;
 
     bool m_showControlPoints;
     vector<Vector2f> m_controlPoints;
+
+    vector<float> m_knots;
 
     //tracks selected vertex for movement
     bool m_selected;

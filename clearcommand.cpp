@@ -19,11 +19,13 @@ bool ClearCommand::mergeWith(const QUndoCommand *other) {
 }
 
 void ClearCommand::redo() {
-    m_displayWidget.m_controlPoints.clear();
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints.clear();
+    //m_displayWidget.repaint();
+    m_displayWidget.clearAllPoints();
 }
 
 void ClearCommand::undo() {
-    m_displayWidget.m_controlPoints = m_originalPoints;
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints = m_originalPoints;
+    //m_displayWidget.repaint();
+    m_displayWidget.setPoints(m_originalPoints);
 }

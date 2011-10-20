@@ -101,6 +101,12 @@ public:
         return c;
     }
 
+    T get(uint i) const {
+        if (i < N)
+            return data[i];
+        return 0;
+    }
+
     //vector subtraction
     Vector<T,N> operator-(const Vector<T,N> &v) const {
         Vector<T,N> result;

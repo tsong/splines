@@ -23,11 +23,13 @@ bool MovePointCommand::mergeWith(const QUndoCommand *other) {
 }
 
 void MovePointCommand::redo() {
-    m_displayWidget.m_controlPoints[m_position] = m_newPoint;
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints[m_position] = m_newPoint;
+    //m_displayWidget.repaint();
+    m_displayWidget.movePoint(m_position, m_newPoint);
 }
 
 void MovePointCommand::undo() {
-    m_displayWidget.m_controlPoints[m_position] = m_originalPoint;
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints[m_position] = m_originalPoint;
+    //m_displayWidget.repaint();
+    m_displayWidget.movePoint(m_position, m_originalPoint);
 }

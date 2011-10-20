@@ -38,19 +38,6 @@ void BasisWidget::resizeGL(int, int) {
     updateProjection();
 }
 
-float N(const vector<float> &u, uint i, uint k, float t) {
-    if (k == 1) {
-        return t >= u[i] && t < u[i+1] ? 1 : 0; //strict lower bound???
-    }
-
-    float N1 = N(u, i,k-1,t);
-    float N2 = N(u, i+1,k-1,t);
-
-    float a = u[i+k-1] - u[i] != 0 ? (t-u[i])/(u[i+k-1]-u[i]) : 0;
-    float b = u[i+k] - u[i+1] != 0 ? (u[i+k]-t)/(u[i+k]-u[i+1]) : 0;
-
-    return a*N1 + b*N2;
-}
 
 void BasisWidget::paintGL() {
     //clear
@@ -74,7 +61,7 @@ void BasisWidget::paintGL() {
             } else {
                 glColor3f(1,1,1);
             }
-            glVertex2f(t, N(m_knots, i, m_order, t) + 2*PADDING + CONTROL_LENGTH);
+            glVertex2f(t,deBoorCox(m_knots, i, m_order, t) + 2*PADDING + CONTROL_LENGTH);
             t += TIME_STEP;
         }
         glEnd();

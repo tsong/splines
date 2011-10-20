@@ -18,11 +18,13 @@ bool AddPointCommand::mergeWith(const QUndoCommand *) {
 }
 
 void AddPointCommand::redo() {
-    m_displayWidget.m_controlPoints.push_back(m_point);
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints.push_back(m_point);
+    //m_displayWidget.repaint();
+    m_displayWidget.insertPoint(m_displayWidget.numberOfPoints(), m_point);
 }
 
 void AddPointCommand::undo() {
-    m_displayWidget.m_controlPoints.pop_back();
-    m_displayWidget.repaint();
+    //m_displayWidget.m_controlPoints.pop_back();
+    //m_displayWidget.repaint();
+    m_displayWidget.deletePoint(m_displayWidget.numberOfPoints()-1);
 }
