@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     splitter->addWidget(displayWidget);
     splitter->addWidget(basisWidget);
-    splitter->setStretchFactor(0,66);
+    splitter->setStretchFactor(0,6);
     splitter->setStretchFactor(1,3);
 
 

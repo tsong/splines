@@ -25,6 +25,7 @@ void DisplayWidget::initializeGL() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glLineWidth(0.75);
+
 }
 
 void DisplayWidget::resizeGL(int width, int height) {
@@ -62,6 +63,16 @@ void DisplayWidget::paintGL() {
         }
     }
 
+    glEnable(GL_LINE_STIPPLE);
+    glLineStipple(1,0x1111);
+    glBegin(GL_LINE_STRIP);
+    for (uint i = 0; i < m_controlPoints.size(); i++) {
+        Vector2f v = m_controlPoints[i];
+        glVertex2f(v[0],v[1]);
+    }
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+
     /*float STEP = 1E-3;
     for (uint i = 3; i < m_controlPoints.size(); i += 3) {
         vector<Vector2f> &CP = m_controlPoints;
@@ -97,7 +108,7 @@ void BSpline(vector<Vector2f> points) {
         u[i] = i;
     }
 
-    uint k = 4;
+    uint k = 3;
     uint n = points.size();
     float STEP = 5E-3;
 
