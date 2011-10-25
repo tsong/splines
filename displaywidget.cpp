@@ -126,7 +126,6 @@ void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
 
 void DisplayWidget::clear() {
     m_undoStack->push(new ClearCommand(*m_spline));
-    repaint();
 }
 
 void DisplayWidget::DisplayWidget::toggleShowControlPoints() {

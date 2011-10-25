@@ -1,4 +1,5 @@
 #include "moveknotcommand.h"
+#include <QDebug>
 
 MoveKnotCommand::MoveKnotCommand(int id, uint position, float newKnot, BSpline &spline, QUndoCommand *parent)
     : QUndoCommand(parent), m_id(id), m_position(position), m_newKnot(newKnot), m_spline(spline)
