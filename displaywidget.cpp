@@ -4,20 +4,25 @@
 
 //#define ABS(x) (x < 0 ? -x : x)
 
-DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack) :
-    QGLWidget(parent), m_undoStack(undoStack), m_showControlPoints(true),
-    m_showControlLines(true), m_order(3)
+DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack, BSpline *spline) :
+    QGLWidget(parent), m_undoStack(undoStack),  m_spline(spline), m_splineCreated(false),
+    m_showControlPoints(true), m_showControlLines(true)
 {
     if (!undoStack) {
         undoStack = new QUndoStack(this);
     }
 
-    for (uint i = 0; i < 10000; i++) {
-        m_knots.push_back(i);
+    if (!spline) {
+        m_spline = new BSpline();
+        m_splineCreated = true;
     }
 }
 
-DisplayWidget::~DisplayWidget() {}
+DisplayWidget::~DisplayWidget() {
+    if (m_splineCreated) {
+        delete m_spline;
+    }
+}
 
 void DisplayWidget::initializeGL() {
     //set background color to white
@@ -50,8 +55,18 @@ void DisplayWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    //draw control points
     if (m_showControlPoints) {
+        m_spline->glDrawControlPoints();
+    }
+
+    if (m_showControlLines) {
+        m_spline->glDrawControlLines();
+    }
+
+    m_spline->glDrawCurve();
+
+    //draw control points
+    /*if (m_showControlPoints) {
         glColor3f(0,0,0);
         for (uint i = 0; i < m_controlPoints.size(); i++) {
             Vector2f v = m_controlPoints[i];
@@ -78,7 +93,7 @@ void DisplayWidget::paintGL() {
         glDisable(GL_LINE_STIPPLE);
     }
 
-    drawBSpline(m_controlPoints, m_knots, m_order);
+    drawBSpline(m_controlPoints, m_knots, m_order);*/
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
@@ -89,9 +104,10 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
     float y = (float)event->y();
 
     //iterate through vertices and see if point clicked is inside a vertex
+    const vector<Vector2f> controlPoints = m_spline->getPoints();
     m_selected = false;
-    for (uint i = 0; i < m_controlPoints.size(); i++) {
-        Vector2f v = m_controlPoints[i];
+    for (uint i = 0; i < controlPoints.size(); i++) {
+        Vector2f v = controlPoints[i];
         if (abs(v[0]-x) <= POINT_RADIUS && abs(v[1]-y) <= POINT_RADIUS) {
             m_selected = true;
             m_selectedIndex = i;
@@ -101,14 +117,13 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
 
     if (m_selected && event->button() == Qt::RightButton) {
         //remove vertex if right mouse button is clicked
-        //m_controlPoints.erase(m_selectedIterator);
-        DeletePointCommand *deletePointCommand = new DeletePointCommand(m_selectedIndex, *this);
+        DeletePointCommand *deletePointCommand = new DeletePointCommand(m_selectedIndex, *m_spline);
         m_undoStack->push(deletePointCommand);
         m_selected = false;
     } else if (!m_selected && event->button() == Qt::LeftButton) {
         //add a new control point if left mouse button is clicked
         Vector2f v(x,y);
-        AddPointCommand *addPointCommand = new AddPointCommand(v, *this);
+        AddPointCommand *addPointCommand = new AddPointCommand(v, *m_spline);
         m_undoStack->push(addPointCommand);
     } else {
         //generate a new id for this point movement command
@@ -123,67 +138,23 @@ void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
         float x = (float)event->x();
         float y = (float)event->y();
         Vector2f v(x,y);
-        //m_controlPoints[m_selectedIndex] = Vector2f(x,y);
 
-        MovePointCommand *movePointCommand = new MovePointCommand(m_moveCommandId, m_selectedIndex, v, *this);
+        MovePointCommand *movePointCommand = new MovePointCommand(m_moveCommandId, m_selectedIndex, v, *m_spline);
         m_undoStack->push(movePointCommand);
         repaint();
     }
 }
 
 void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
-    m_selected = false;
-    repaint();
-}
-void DisplayWidget::setOrder(uint order) {
-    if (order > 0)
-        m_order = order;
-    repaint();
+    if (m_selected) {
+        m_selected = false;
+        repaint();
+    }
 }
 
 void DisplayWidget::clear() {
-    m_undoStack->push(new ClearCommand(*this));
-    emit pointsChanged(m_controlPoints);
+    m_undoStack->push(new ClearCommand(*m_spline));
     repaint();
-}
-
-void DisplayWidget::setKnots(const vector<float> &knots) {
-    m_knots = knots;
-    repaint();
-}
-
-void DisplayWidget::insertPoint(uint i, Vector2f point) {
-    m_controlPoints.insert(m_controlPoints.begin() + i, point);
-    emit pointsChanged(m_controlPoints);
-    repaint();
-}
-
-void DisplayWidget::deletePoint(uint i) {
-    m_controlPoints.erase(m_controlPoints.begin() + i);
-    emit pointsChanged(m_controlPoints);
-    repaint();
-}
-
-void DisplayWidget::movePoint(uint i, Vector2f point) {
-    m_controlPoints[i] = point;
-    //emit pointsChanged(m_controlPoints);
-    repaint();
-}
-
-void DisplayWidget::clearAllPoints() {
-    m_controlPoints.clear();
-    emit pointsChanged(m_controlPoints);
-    repaint();
-}
-
-void DisplayWidget::setPoints(vector<Vector2f> points) {
-    m_controlPoints = points;
-    emit pointsChanged(m_controlPoints);
-    repaint();
-}
-
-uint DisplayWidget::numberOfPoints() {
-    return m_controlPoints.size();
 }
 
 void DisplayWidget::DisplayWidget::toggleShowControlPoints() {

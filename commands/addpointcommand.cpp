@@ -1,7 +1,7 @@
 #include "addpointcommand.h"
 
-AddPointCommand::AddPointCommand(Vector2f point, DisplayWidget &displayWidget, QUndoCommand *parent)
-    : QUndoCommand(parent), m_point(point), m_displayWidget(displayWidget)
+AddPointCommand::AddPointCommand(Vector2f point, BSpline &spline, QUndoCommand *parent)
+    : QUndoCommand(parent), m_point(point), m_spline(spline)
 {
 }
 
@@ -18,13 +18,9 @@ bool AddPointCommand::mergeWith(const QUndoCommand *) {
 }
 
 void AddPointCommand::redo() {
-    //m_displayWidget.m_controlPoints.push_back(m_point);
-    //m_displayWidget.repaint();
-    m_displayWidget.insertPoint(m_displayWidget.numberOfPoints(), m_point);
+    m_spline.insertPoint(m_spline.numberOfPoints(), m_point);
 }
 
 void AddPointCommand::undo() {
-    //m_displayWidget.m_controlPoints.pop_back();
-    //m_displayWidget.repaint();
-    m_displayWidget.deletePoint(m_displayWidget.numberOfPoints()-1);
+    m_spline.deletePoint(m_spline.numberOfPoints()-1);
 }

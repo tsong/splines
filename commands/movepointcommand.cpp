@@ -1,9 +1,9 @@
 #include "movepointcommand.h"
 
-MovePointCommand::MovePointCommand(int id, uint position, Vector2f newPoint, DisplayWidget &displayWidget, QUndoCommand *parent)
-    : QUndoCommand(parent), m_id(id), m_position(position), m_newPoint(newPoint), m_displayWidget(displayWidget)
+MovePointCommand::MovePointCommand(int id, uint position, Vector2f newPoint, BSpline &spline, QUndoCommand *parent)
+    : QUndoCommand(parent), m_id(id), m_position(position), m_newPoint(newPoint), m_spline(spline)
 {
-    m_originalPoint = m_displayWidget.m_controlPoints[position];
+    m_originalPoint = m_spline.getPoints()[position];
 }
 
 MovePointCommand::~MovePointCommand() {
@@ -23,13 +23,9 @@ bool MovePointCommand::mergeWith(const QUndoCommand *other) {
 }
 
 void MovePointCommand::redo() {
-    //m_displayWidget.m_controlPoints[m_position] = m_newPoint;
-    //m_displayWidget.repaint();
-    m_displayWidget.movePoint(m_position, m_newPoint);
+    m_spline.movePoint(m_position, m_newPoint);
 }
 
 void MovePointCommand::undo() {
-    //m_displayWidget.m_controlPoints[m_position] = m_originalPoint;
-    //m_displayWidget.repaint();
-    m_displayWidget.movePoint(m_position, m_originalPoint);
+    m_spline.movePoint(m_position, m_originalPoint);
 }

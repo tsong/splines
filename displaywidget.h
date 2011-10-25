@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QUndoStack>
 
+#include "bspline.h"
 #include "utils/vector.h"
 
 #include "commands/addpointcommand.h"
@@ -20,16 +21,10 @@ using namespace std;
 class DisplayWidget : public QGLWidget {
     Q_OBJECT
 public:
-    DisplayWidget(QWidget *parent = 0, QUndoStack *undoStack = 0);
+    DisplayWidget(QWidget *parent = 0, QUndoStack *undoStack = 0, BSpline *spline = 0);
     ~DisplayWidget();
 
     uint numberOfPoints();
-
-    friend class AddPointCommand;
-    friend class DeletePointCommand;
-    friend class MovePointCommand;
-    friend class ClearCommand;
-    friend class ToggleCommand;
 
 signals:
     void pointsChanged(const vector<Vector2f> &points);
@@ -37,9 +32,6 @@ signals:
 public slots:
     //clears all control points
     void clear();
-
-    void setKnots(const vector<float> &knots);
-    void setOrder(uint order);
     void toggleShowControlPoints();
     void toggleShowControlLines();
 
@@ -54,21 +46,14 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
-    void insertPoint(uint i, Vector2f point);
-    void deletePoint(uint i);
-    void movePoint(uint i, Vector2f point);
-    void clearAllPoints();
-    void setPoints(vector<Vector2f> points);
-
 protected:
     QUndoStack *m_undoStack;
 
+    BSpline *m_spline;
+    bool m_splineCreated;
+
     bool m_showControlPoints;
     bool m_showControlLines;
-    vector<Vector2f> m_controlPoints;
-
-    vector<float> m_knots;
-    uint m_order;
 
     //tracks selected vertex for movement
     bool m_selected;

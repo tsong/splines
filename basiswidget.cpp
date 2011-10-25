@@ -7,12 +7,20 @@
 #define CONTROL_LENGTH 0.13
 #define PADDING 0.05
 
-BasisWidget::BasisWidget(QWidget *parent) :
-    QGLWidget(parent), m_order(3), m_isKnotSelected(false)
+BasisWidget::BasisWidget(QWidget *parent, BSpline *spline) :
+    QGLWidget(parent), m_spline(spline), m_isKnotSelected(false)
 {
+    if (!m_spline) {
+        m_spline = new BSpline(3);
+        m_splineCreated = true;
+    }
 }
 
-BasisWidget::~BasisWidget() {}
+BasisWidget::~BasisWidget() {
+    if (m_splineCreated) {
+        delete m_spline;
+    }
+}
 
 
 void BasisWidget::initializeGL() {
@@ -36,7 +44,7 @@ void BasisWidget::resizeGL(int, int) {
 
 
 void BasisWidget::paintGL() {
-    //clear
+    /*//clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -91,7 +99,7 @@ void BasisWidget::paintGL() {
         }
 
         glColor3f(1,1,1);
-    }
+    }*/
 }
 
 void BasisWidget::convertCoordinates(float xIn, float yIn, float &xOut, float &yOut) {
@@ -105,7 +113,7 @@ void BasisWidget::convertCoordinates(float xIn, float yIn, float &xOut, float &y
 
 /*mouse events*/
 void BasisWidget::mousePressEvent(QMouseEvent *event) {
-    Vector2f p;
+    /*Vector2f p;
     convertCoordinates(event->x(), event->y(), p[0], p[1]);
 
     for (uint i = 0; i < m_knots.size(); i++) {
@@ -125,13 +133,13 @@ void BasisWidget::mousePressEvent(QMouseEvent *event) {
             }
             break;
         }
-    }
+    }*/
 
     repaint();
 }
 
 void BasisWidget::mouseMoveEvent(QMouseEvent *event) {
-    if (m_isKnotSelected) {
+    /*if (m_isKnotSelected) {
         float x,y;
         convertCoordinates(event->x(), event->y(), x, y);
 
@@ -145,7 +153,7 @@ void BasisWidget::mouseMoveEvent(QMouseEvent *event) {
         moveKnot(i, newKnot);
         emit knotsChanged(m_knots);
         repaint();
-    }
+    }*/
 }
 
 void BasisWidget::mouseReleaseEvent(QMouseEvent *) {
@@ -154,7 +162,7 @@ void BasisWidget::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void BasisWidget::updateProjection() {
-    makeCurrent();
+    /*makeCurrent();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -169,59 +177,12 @@ void BasisWidget::updateProjection() {
     glViewport(0, 0, width(), height());
     glOrtho(m_leftProj, m_rightProj, m_bottomProj, m_topProj, -1, 1);
 
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);*/
 }
 
 void BasisWidget::getControlTriangle(uint i, Vector2f &v1, Vector2f &v2, Vector2f &v3) {
-    v1 = Vector2f(m_knots[i], CONTROL_LENGTH + PADDING);
+    /*v1 = Vector2f(m_knots[i], CONTROL_LENGTH + PADDING);
     v2 = Vector2f(m_knots[i] + CONTROL_LENGTH, PADDING);
-    v3 = Vector2f(m_knots[i] - CONTROL_LENGTH, PADDING);
+    v3 = Vector2f(m_knots[i] - CONTROL_LENGTH, PADDING);*/
 }
 
-void BasisWidget::setOrder(uint order) {
-    if (order > 0)
-        m_order = order;
-    repaint();
-}
-
-void BasisWidget::setKnots(vector<float> knots) {
-    m_knots = knots;
-    updateProjection();
-}
-
-void BasisWidget::addKnot(float knot) {
-    m_knots.push_back(knot);
-    updateProjection();
-}
-
-bool BasisWidget::removeKnot(uint position) {
-    if (position >= m_knots.size())
-        return false;
-
-    m_knots.erase(m_knots.begin() + position);
-    updateProjection();
-    return true;
-}
-
-bool BasisWidget::moveKnot(uint position, float newKnot) {
-    if (position >= m_knots.size())
-        return false;
-
-    m_knots[position] = newKnot;
-    return true;
-}
-
-void BasisWidget::createKnots(const vector<Vector2f> &controlPoints) {
-    m_knots.clear();
-
-    if (controlPoints.size() > 0) {
-        for (uint i = 0; i < controlPoints.size() + m_order; i++) {
-            m_knots.push_back(i);
-        }
-    }
-
-    updateProjection();
-
-    emit knotsChanged(m_knots);
-    repaint();
-}

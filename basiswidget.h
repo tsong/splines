@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <vector>
+#include "bspline.h"
 #include "utils/vector.h"
 
 using namespace std;
@@ -11,20 +12,8 @@ using namespace std;
 class BasisWidget : public QGLWidget {
     Q_OBJECT
 public:
-    BasisWidget(QWidget *parent = 0);
+    BasisWidget(QWidget *parent = 0, BSpline *spline = 0);
     ~BasisWidget();
-
-    void setKnots(vector<float> knots);
-    void addKnot(float knot);
-    bool removeKnot(uint position);
-    bool moveKnot(uint position, float newKnot);
-
-signals:
-    void knotsChanged(const vector<float> &knots);
-
-public slots:
-    void setOrder(uint order);
-    void createKnots(const vector<Vector2f> &controlPoints);
 
 protected:
     /*OpenGL events*/
@@ -43,8 +32,8 @@ protected:
     void getProjectionCoord(float &left, float &right, float &bottom, float &top);
 
 protected:
-    vector<float> m_knots;
-    uint m_order;
+    BSpline *m_spline;
+    bool m_splineCreated;
 
     bool m_isKnotSelected;
     uint m_selectedIndex;

@@ -16,7 +16,7 @@ class DisplayWidget;
 class DeletePointCommand : public QUndoCommand {
 
 public:
-    DeletePointCommand(uint position, DisplayWidget &displayWidget, QUndoCommand *parent = 0);
+    DeletePointCommand(uint position, BSpline &spline, QUndoCommand *parent = 0);
     ~DeletePointCommand();
 
     int id() const;
@@ -25,7 +25,7 @@ public:
     void undo();
 
 protected:
-    DisplayWidget &m_displayWidget;
+    BSpline &m_spline;
     uint m_position;
     Vector2f m_point;
 

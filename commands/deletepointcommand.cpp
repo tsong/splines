@@ -1,9 +1,9 @@
 #include "deletepointcommand.h"
 
-DeletePointCommand::DeletePointCommand(uint position, DisplayWidget &displayWidget, QUndoCommand *parent)
-    :  QUndoCommand(parent), m_displayWidget(displayWidget), m_position(position)
+DeletePointCommand::DeletePointCommand(uint position, BSpline &spline, QUndoCommand *parent)
+    :  QUndoCommand(parent), m_spline(spline), m_position(position)
 {
-    m_point = m_displayWidget.m_controlPoints[position];
+    m_point = m_spline.getPoints()[position];
 }
 
 DeletePointCommand::~DeletePointCommand() {
@@ -19,16 +19,10 @@ bool DeletePointCommand::mergeWith(const QUndoCommand *) {
 }
 
 void DeletePointCommand::redo() {
-    //vector<Vector2f> &points = m_displayWidget.m_controlPoints;
-    //m_displayWidget.m_controlPoints.erase(points.begin() + m_position);
-    //m_displayWidget.repaint();
-    m_displayWidget.deletePoint(m_position);
+    m_spline.deletePoint(m_position);
 }
 
 void DeletePointCommand::undo() {
-    //vector<Vector2f> &points = m_displayWidget.m_controlPoints;
-    //points.insert(points.begin() + m_position, m_point);
-    //m_displayWidget.repaint();
-    m_displayWidget.insertPoint(m_position, m_point);
+    m_spline.insertPoint(m_position, m_point);
 }
 

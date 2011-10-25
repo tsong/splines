@@ -14,7 +14,7 @@ class DisplayWidget;
 class ClearCommand : public QUndoCommand {
 
 public:
-    ClearCommand(DisplayWidget &displayWidget, QUndoCommand *parent = 0);
+    ClearCommand(BSpline &spline, QUndoCommand *parent = 0);
     ~ClearCommand();
 
     int id() const;
@@ -24,7 +24,7 @@ public:
 
 protected:
     vector<Vector2f> m_originalPoints;
-    DisplayWidget &m_displayWidget;
+    BSpline &m_spline;
 
 };
 

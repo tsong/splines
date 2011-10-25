@@ -3,7 +3,7 @@
 
 #include <QUndoCommand>
 #include "utils/vector.h"
-#include "displaywidget.h"
+#include "bspline.h"
 
 #define ADD_POINT_COMMAND_ID 0xFF00
 
@@ -14,7 +14,7 @@ class DisplayWidget;
 class AddPointCommand : public QUndoCommand {
 
 public:
-    AddPointCommand(Vector2f point, DisplayWidget &displayWidget, QUndoCommand *parent = 0);
+    AddPointCommand(Vector2f point, BSpline &spline, QUndoCommand *parent = 0);
     ~AddPointCommand();
 
     int id() const;
@@ -24,7 +24,7 @@ public:
 
 protected:
     Vector2f m_point;
-    DisplayWidget &m_displayWidget;
+    BSpline &m_spline;
 
 };
 

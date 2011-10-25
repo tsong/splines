@@ -77,8 +77,8 @@ void MainWindow::createMenus() {
     QMenu *orderMenu = menuBar()->addMenu("&Order");
     for (uint i = 2; i < 7; i++) {
         OrderAction *orderAction = new OrderAction(i, QString("&%1").arg(i), this);
-        connect(orderAction, SIGNAL(triggered(uint)), displayWidget, SLOT(setOrder(uint)));
-        connect(orderAction, SIGNAL(triggered(uint)), basisWidget, SLOT(setOrder(uint)));
+        //connect(orderAction, SIGNAL(triggered(uint)), displayWidget, SLOT(setOrder(uint)));
+        //connect(orderAction, SIGNAL(triggered(uint)), basisWidget, SLOT(setOrder(uint)));
         orderAction->setShortcut(QString("Ctrl+%1").arg(i));
         orderMenu->addAction(orderAction);
     }

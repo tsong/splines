@@ -12,7 +12,7 @@ class DisplayWidget;
 class MovePointCommand : public QUndoCommand {
 
 public:
-    MovePointCommand(int id, uint position, Vector2f newPoint, DisplayWidget &displayWidget, QUndoCommand *parent = 0);
+    MovePointCommand(int id, uint position, Vector2f newPoint, BSpline &spline, QUndoCommand *parent = 0);
     ~MovePointCommand();
 
     int id() const;
@@ -25,7 +25,7 @@ protected:
     uint m_position;
     Vector2f m_newPoint;
     Vector2f m_originalPoint;
-    DisplayWidget &m_displayWidget;
+    BSpline &m_spline;
 
 };
 #endif // MOVEPOINTCOMMAND_H

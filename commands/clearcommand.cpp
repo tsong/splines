@@ -1,9 +1,9 @@
 #include "clearcommand.h"
 
-ClearCommand::ClearCommand(DisplayWidget &displayWidget, QUndoCommand *parent)
-    : QUndoCommand(parent), m_displayWidget(displayWidget)
+ClearCommand::ClearCommand(BSpline &spline, QUndoCommand *parent)
+    : QUndoCommand(parent), m_spline(spline)
 {
-    m_originalPoints = displayWidget.m_controlPoints;
+    m_originalPoints = m_spline.getPoints();
 }
 
 ClearCommand::~ClearCommand() {
@@ -19,13 +19,9 @@ bool ClearCommand::mergeWith(const QUndoCommand *other) {
 }
 
 void ClearCommand::redo() {
-    //m_displayWidget.m_controlPoints.clear();
-    //m_displayWidget.repaint();
-    m_displayWidget.clearAllPoints();
+    m_spline.clearAllPoints();
 }
 
 void ClearCommand::undo() {
-    //m_displayWidget.m_controlPoints = m_originalPoints;
-    //m_displayWidget.repaint();
-    m_displayWidget.setPoints(m_originalPoints);
+    m_spline.setPoints(m_originalPoints);
 }
