@@ -11,6 +11,7 @@ DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack, BSpline *sp
     if (!undoStack) {
         undoStack = new QUndoStack(this);
     }
+    connect(m_undoStack, SIGNAL(indexChanged(int)), this, SLOT(repaint()));
 
     if (!spline) {
         m_spline = new BSpline();
@@ -64,36 +65,6 @@ void DisplayWidget::paintGL() {
     }
 
     m_spline->glDrawCurve();
-
-    //draw control points
-    /*if (m_showControlPoints) {
-        glColor3f(0,0,0);
-        for (uint i = 0; i < m_controlPoints.size(); i++) {
-            Vector2f v = m_controlPoints[i];
-            if (m_selected && m_selectedIndex == i) {
-                glColor3f(1,0,0);
-                glDrawCircle(v[0], v[1], POINT_RADIUS);
-                glColor3f(0,0,0);
-            }else {
-                glDrawCircle(v[0], v[1], POINT_RADIUS);
-            }
-        }
-    }
-
-    //draw control lines
-    if (m_showControlLines) {
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(1,0x1111);
-        glBegin(GL_LINE_STRIP);
-        for (uint i = 0; i < m_controlPoints.size(); i++) {
-            Vector2f v = m_controlPoints[i];
-            glVertex2f(v[0],v[1]);
-        }
-        glEnd();
-        glDisable(GL_LINE_STIPPLE);
-    }
-
-    drawBSpline(m_controlPoints, m_knots, m_order);*/
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
@@ -158,10 +129,10 @@ void DisplayWidget::clear() {
 }
 
 void DisplayWidget::DisplayWidget::toggleShowControlPoints() {
-    m_undoStack->push(new ToggleCommand(*this, m_showControlPoints));
+    m_undoStack->push(new ToggleCommand(m_showControlPoints));
 }
 
 void DisplayWidget::toggleShowControlLines() {
-    m_undoStack->push(new ToggleCommand(*this, m_showControlLines));
+    m_undoStack->push(new ToggleCommand(m_showControlLines));
 }
 

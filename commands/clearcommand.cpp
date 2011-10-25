@@ -4,6 +4,7 @@ ClearCommand::ClearCommand(BSpline &spline, QUndoCommand *parent)
     : QUndoCommand(parent), m_spline(spline)
 {
     m_originalPoints = m_spline.getPoints();
+    m_originalKnots = m_spline.getKnots();
 }
 
 ClearCommand::~ClearCommand() {
@@ -24,4 +25,5 @@ void ClearCommand::redo() {
 
 void ClearCommand::undo() {
     m_spline.setPoints(m_originalPoints);
+    m_spline.setKnots(m_originalKnots);
 }

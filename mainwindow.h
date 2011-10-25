@@ -8,6 +8,7 @@
 #include <QUndoStack>
 #include "displaywidget.h"
 #include "basiswidget.h"
+#include "bspline.h"
 
 
 class MainWindow : public QMainWindow {
@@ -20,14 +21,18 @@ public:
 protected:
     void createMenus();
 
+protected slots:
+    void setOrder(uint k);
+
 protected:
     //surface which users interact with and draw the points
-    DisplayWidget *displayWidget;
+    DisplayWidget *m_displayWidget;
 
     //widget which displays and let users interact with the spline basis functions
-    BasisWidget *basisWidget;
+    BasisWidget *m_basisWidget;
 
-    QUndoStack *undoStack;
+    QUndoStack *m_undoStack;
+    BSpline m_spline;
 };
 
 #endif // MAINWINDOW_H

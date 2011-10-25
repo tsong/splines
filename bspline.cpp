@@ -2,6 +2,8 @@
 #include "QGLWidget"
 #include "utils/glutils.h"
 
+#define TIME_STEP 1E-3
+
 BSpline::BSpline(uint order)
     : m_order(order)
 {
@@ -11,7 +13,7 @@ BSpline::~BSpline() {}
 
 
 void BSpline::glDrawControlPoints(int selectedIndex) {
-    bool isSelected = selectedIndex > 0 && selectedIndex < numberOfPoints();
+    bool isSelected = selectedIndex > 0 && selectedIndex < static_cast<int>(numberOfPoints());
 
     //draw control points
     glColor3f(0,0,0);
@@ -43,6 +45,32 @@ void BSpline::glDrawCurve() {
     drawBSpline(m_controlPoints, m_knots, m_order);
 }
 
+void BSpline::glDrawBasis() {
+    if (m_knots.size() < m_order) return;
+
+    //bounds of the parametric space
+    float lowerBound = m_knots[m_order-1];
+    float upperBound = m_knots[m_knots.size() - m_order];
+
+    //draw each basis function
+    for (uint i = 0; i < m_knots.size() - m_order; i++) {
+        float t = m_knots[i];
+
+        glBegin(GL_LINE_STRIP);
+        while (t <= m_knots[i+m_order]) {
+            if (t >= lowerBound && t <= upperBound) {
+                glColor3f(1,0,0);
+            } else {
+                glColor3f(1,1,1);
+            }
+            glVertex2f(t, deBoorCox(m_knots, i, m_order, t));
+            t += TIME_STEP;
+        }
+        glEnd();
+
+        glColor3f(1,1,1);
+    }
+}
 
 
 
@@ -51,8 +79,13 @@ void BSpline::setOrder(uint order) {
         m_order = order;
 }
 
+uint BSpline::getOrder() {
+    return m_order;
+}
+
 void BSpline::setKnots(const vector<float> &knots) {
-    m_knots = knots;
+    if (knots.size() == m_knots.size())
+        m_knots = knots;
 }
 
 const vector<Vector2f>& BSpline::getPoints() {
@@ -61,11 +94,16 @@ const vector<Vector2f>& BSpline::getPoints() {
 
 void BSpline::insertPoint(uint i, Vector2f point) {
     m_controlPoints.insert(m_controlPoints.begin() + i, point);
-    createKnots(m_controlPoints);
+    if (numberOfKnots() > 0) {
+        addKnot(m_knots.back()+1);
+    } else {
+        createKnots(m_controlPoints);
+    }
 }
 
 void BSpline::deletePoint(uint i) {
     m_controlPoints.erase(m_controlPoints.begin() + i);
+    removeKnot(m_knots.size()-1);
 }
 
 void BSpline::movePoint(uint i, Vector2f point) {
@@ -74,10 +112,13 @@ void BSpline::movePoint(uint i, Vector2f point) {
 
 void BSpline::clearAllPoints() {
     m_controlPoints.clear();
+    createKnots(m_controlPoints);
+
 }
 
 void BSpline::setPoints(vector<Vector2f> points) {
     m_controlPoints = points;
+    createKnots(m_controlPoints);
 }
 
 uint BSpline::numberOfPoints() {
@@ -107,6 +148,11 @@ bool BSpline::moveKnot(uint position, float newKnot) {
     m_knots[position] = newKnot;
     return true;
 }
+
+uint BSpline::numberOfKnots() {
+    return m_knots.size();
+}
+
 
 void BSpline::createKnots(const vector<Vector2f> &controlPoints) {
     m_knots.clear();

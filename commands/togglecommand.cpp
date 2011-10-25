@@ -1,7 +1,7 @@
 #include "togglecommand.h"
 
-ToggleCommand::ToggleCommand(DisplayWidget &displayWidget, bool &variable, QUndoCommand *parent)
-    : QUndoCommand(parent), m_displayWidget(displayWidget), m_variable(variable), m_originalValue(variable)
+ToggleCommand::ToggleCommand(bool &variable, QUndoCommand *parent)
+    : QUndoCommand(parent), m_variable(variable), m_originalValue(variable)
 {
 }
 
@@ -17,11 +17,9 @@ bool ToggleCommand::mergeWith(const QUndoCommand *) {
 
 void ToggleCommand::redo() {
     m_variable = !m_originalValue;
-    m_displayWidget.repaint();
 }
 
 void ToggleCommand::undo() {
     m_variable = m_originalValue;
-    m_displayWidget.repaint();
 }
 

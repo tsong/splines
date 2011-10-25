@@ -20,15 +20,19 @@ public:
     uint numberOfPoints();
 
     void setOrder(uint order);
+    uint getOrder();
     const vector<float>& getKnots();
+    void setKnots(const vector<float> &knots);
     bool moveKnot(uint position, float newKnot);
+    uint numberOfKnots();
 
+    /*OpenGL draw methods*/
     void glDrawControlPoints(int selectedIndex = -1);
     void glDrawControlLines();
     void glDrawCurve();
+    void glDrawBasis();
 
 protected:
-    void setKnots(const vector<float> &knots);
     void addKnot(float knot);
     bool removeKnot(uint position);
     void createKnots(const vector<Vector2f> &controlPoints);

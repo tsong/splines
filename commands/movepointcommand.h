@@ -3,7 +3,7 @@
 
 #include <QUndoCommand>
 #include "utils/vector.h"
-#include "displaywidget.h"
+#include "bspline.h"
 
 using namespace std;
 

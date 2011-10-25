@@ -24,6 +24,7 @@ public:
 
 protected:
     Vector2f m_point;
+    vector<float> m_originalKnots;
     BSpline &m_spline;
 
 };

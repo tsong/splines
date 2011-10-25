@@ -4,6 +4,7 @@ DeletePointCommand::DeletePointCommand(uint position, BSpline &spline, QUndoComm
     :  QUndoCommand(parent), m_spline(spline), m_position(position)
 {
     m_point = m_spline.getPoints()[position];
+    m_originalKnots = m_spline.getKnots();
 }
 
 DeletePointCommand::~DeletePointCommand() {
@@ -24,5 +25,6 @@ void DeletePointCommand::redo() {
 
 void DeletePointCommand::undo() {
     m_spline.insertPoint(m_position, m_point);
+    m_spline.setKnots(m_originalKnots);
 }
 

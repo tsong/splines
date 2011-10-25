@@ -3,7 +3,7 @@
 
 #include <QUndoCommand>
 #include "utils/vector.h"
-#include "displaywidget.h"
+#include "bspline.h"
 
 #define CLEAR_COMMAND_ID 0xFF04
 
@@ -23,6 +23,7 @@ public:
     void undo();
 
 protected:
+    vector<float> m_originalKnots;
     vector<Vector2f> m_originalPoints;
     BSpline &m_spline;
 

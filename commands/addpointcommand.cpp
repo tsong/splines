@@ -3,6 +3,7 @@
 AddPointCommand::AddPointCommand(Vector2f point, BSpline &spline, QUndoCommand *parent)
     : QUndoCommand(parent), m_point(point), m_spline(spline)
 {
+    m_originalKnots = m_spline.getKnots();
 }
 
 AddPointCommand::~AddPointCommand() {
@@ -23,4 +24,5 @@ void AddPointCommand::redo() {
 
 void AddPointCommand::undo() {
     m_spline.deletePoint(m_spline.numberOfPoints()-1);
+    m_spline.setKnots(m_originalKnots);
 }

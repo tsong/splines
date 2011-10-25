@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     commands/clearcommand.cpp \
     commands/movepointcommand.cpp \
     commands/togglecommand.cpp \
-    bspline.cpp
+    bspline.cpp \
+    commands/moveknotcommand.cpp \
+    commands/setordercommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -37,7 +39,9 @@ HEADERS  += mainwindow.h \
     commands/clearcommand.h \
     commands/movepointcommand.h \
     commands/togglecommand.h \
-    bspline.h
+    bspline.h \
+    commands/moveknotcommand.h \
+    commands/setordercommand.h
 
 FORMS    +=
 

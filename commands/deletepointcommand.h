@@ -5,7 +5,7 @@
 
 #include <QUndoCommand>
 #include "utils/vector.h"
-#include "displaywidget.h"
+#include "bspline.h"
 
 #define DELETE_POINT_COMMAND_ID 0xFF01
 
@@ -28,7 +28,7 @@ protected:
     BSpline &m_spline;
     uint m_position;
     Vector2f m_point;
-
+    vector<float> m_originalKnots;
 };
 
 #endif // DELETEPOINTCOMMAND_H

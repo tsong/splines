@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QMouseEvent>
+#include <QUndoStack>
 #include <vector>
 #include "bspline.h"
 #include "utils/vector.h"
@@ -12,7 +13,7 @@ using namespace std;
 class BasisWidget : public QGLWidget {
     Q_OBJECT
 public:
-    BasisWidget(QWidget *parent = 0, BSpline *spline = 0);
+    BasisWidget(QWidget *parent = 0, QUndoStack *undoStack = 0, BSpline *spline = 0);
     ~BasisWidget();
 
 protected:
@@ -26,17 +27,24 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
-    void updateProjection();
+protected:
     void convertCoordinates(float xIn, float yIn, float &xOut, float &yOut);
     void getControlTriangle(uint i, Vector2f &v1, Vector2f &v2, Vector2f &v3);
     void getProjectionCoord(float &left, float &right, float &bottom, float &top);
 
+protected slots:
+    void updateProjection();
+
 protected:
+    QUndoStack *m_undoStack;
+    int m_commandId;
+
     BSpline *m_spline;
     bool m_splineCreated;
 
     bool m_isKnotSelected;
     uint m_selectedIndex;
+    uint m_lastKnotSize;
 
     float m_leftProj;
     float m_rightProj;
