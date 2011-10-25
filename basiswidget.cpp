@@ -1,6 +1,6 @@
 #include "basiswidget.h"
-#include "glutils.h"
-#include "pointsutil.h"
+#include "utils/glutils.h"
+#include "utils/pointutils.h"
 #include <QDebug>
 
 #define TIME_STEP 1E-3

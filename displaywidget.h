@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QUndoStack>
 
-#include "vector.h"
+#include "utils/vector.h"
 
 #include "commands/addpointcommand.h"
 #include "commands/deletepointcommand.h"

@@ -13,29 +13,31 @@ TEMPLATE = app
 SOURCES += main.cpp\
     mainwindow.cpp \
     displaywidget.cpp \
-    glutils.cpp \
-    pointsutil.cpp \
     basiswidget.cpp \
     orderaction.cpp \
+    utils/glutils.cpp \
+    utils/pointutils.cpp \
     commands/addpointcommand.cpp \
     commands/deletepointcommand.cpp \
     commands/clearcommand.cpp \
     commands/movepointcommand.cpp \
-    commands/togglecommand.cpp
+    commands/togglecommand.cpp \
+    bspline.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
-    matrix.h \
-    vector.h \
-    glutils.h \
-    pointsutil.h \
     basiswidget.h \
     orderaction.h \
+    utils/matrix.h \
+    utils/vector.h \
+    utils/glutils.h \
+    utils/pointutils.h \
     commands/addpointcommand.h \
     commands/deletepointcommand.h \
     commands/clearcommand.h \
     commands/movepointcommand.h \
-    commands/togglecommand.h
+    commands/togglecommand.h \
+    bspline.h
 
 FORMS    +=
 

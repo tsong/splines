@@ -4,7 +4,7 @@
 #include <QUndoCommand>
 
 #include <QUndoCommand>
-#include "vector.h"
+#include "utils/vector.h"
 #include "displaywidget.h"
 
 #define DELETE_POINT_COMMAND_ID 0xFF01

@@ -2,7 +2,7 @@
 #define MOVEPOINTCOMMAND_H
 
 #include <QUndoCommand>
-#include "vector.h"
+#include "utils/vector.h"
 #include "displaywidget.h"
 
 using namespace std;

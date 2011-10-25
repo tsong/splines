@@ -4,7 +4,7 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <vector>
-#include "vector.h"
+#include "utils/vector.h"
 
 using namespace std;
 

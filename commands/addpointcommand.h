@@ -2,7 +2,7 @@
 #define ADDPOINTCOMMAND_H
 
 #include <QUndoCommand>
-#include "vector.h"
+#include "utils/vector.h"
 #include "displaywidget.h"
 
 #define ADD_POINT_COMMAND_ID 0xFF00

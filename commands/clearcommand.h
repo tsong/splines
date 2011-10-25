@@ -2,7 +2,7 @@
 #define CLEARCOMMAND_H
 
 #include <QUndoCommand>
-#include "vector.h"
+#include "utils/vector.h"
 #include "displaywidget.h"
 
 #define CLEAR_COMMAND_ID 0xFF04

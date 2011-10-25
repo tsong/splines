@@ -1,6 +1,6 @@
 #include <QDebug>
 #include "displaywidget.h"
-#include "glutils.h"
+#include "utils/glutils.h"
 
 //#define ABS(x) (x < 0 ? -x : x)
 
