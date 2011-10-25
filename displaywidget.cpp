@@ -2,15 +2,15 @@
 #include "displaywidget.h"
 #include "utils/glutils.h"
 
-//#define ABS(x) (x < 0 ? -x : x)
-
 DisplayWidget::DisplayWidget(QWidget *parent, QUndoStack *undoStack, BSpline *spline) :
     QGLWidget(parent), m_undoStack(undoStack),  m_spline(spline), m_splineCreated(false),
-    m_showControlPoints(true), m_showControlLines(true)
+    m_showControlPoints(true), m_showControlLines(true), m_showSegments(false)
 {
     if (!undoStack) {
         undoStack = new QUndoStack(this);
     }
+
+    //each action will redraw the scene
     connect(m_undoStack, SIGNAL(indexChanged(int)), this, SLOT(repaint()));
 
     if (!spline) {
@@ -52,7 +52,6 @@ void DisplayWidget::resizeGL(int width, int height) {
 }
 
 void DisplayWidget::paintGL() {
-    //clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -64,7 +63,7 @@ void DisplayWidget::paintGL() {
         m_spline->glDrawControlLines();
     }
 
-    m_spline->glDrawCurve();
+    m_spline->glDrawCurve(m_showSegments);
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
@@ -105,6 +104,7 @@ void DisplayWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
+    //issue move command if a control point is currently selected
     if (m_selected) {
         float x = (float)event->x();
         float y = (float)event->y();
@@ -117,6 +117,7 @@ void DisplayWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DisplayWidget::mouseReleaseEvent(QMouseEvent *) {
+    //unselect control point
     if (m_selected) {
         m_selected = false;
         repaint();
@@ -136,3 +137,6 @@ void DisplayWidget::toggleShowControlLines() {
     m_undoStack->push(new ToggleCommand(m_showControlLines));
 }
 
+void DisplayWidget::toggleShowSegments() {
+    m_undoStack->push(new ToggleCommand(m_showSegments));
+}

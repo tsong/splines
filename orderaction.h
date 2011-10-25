@@ -3,6 +3,7 @@
 
 #include <QAction>
 
+//simple inheritance of QAction so we can emit triggered(uint k)
 class OrderAction : public QAction
 {
     Q_OBJECT

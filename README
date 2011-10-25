@@ -27,6 +27,8 @@ The canvas can be cleared using the "Clear" menu item under the "Edit" menu.
 
 The visibility of control points and control lines can be toggled under the "Show" menu.
     -note that if control points are not visible, you can't control or add new control points
+The "Show Spline Segments" and "Show Basis Segments" menu items under "Show" toggles whether
+spline or basis segments are colored distinctively.
 
 Use the undo and redo commands under the "Edit" menu to undo and redo actions.
 Use the "Order" menu to change the order of the B Spline basis functions
@@ -35,6 +37,8 @@ Drag the arrows beneath each knot in the parametric space to move the correspond
 If the knots multiplicity is greater than 1:
     -left clicking drags the left most knot
     -right clicking drags the right most knot
+
+The "Reset Knots" item under the "Edit" menu will reset the knots to their original uniform position.
 
 ===================
      Build

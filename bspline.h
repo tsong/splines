@@ -34,20 +34,22 @@ public:
     /*OpenGL draw methods*/
     void glDrawControlPoints(int selectedIndex = -1);
     void glDrawControlLines();
-    void glDrawCurve();
-    void glDrawBasis();
+    void glDrawCurve(bool showSegments = false);
+    void glDrawBasis(bool showSegments = false);
 
 protected:
+    //altering knots should only be done internally, since it may
+    //corrupt the state of the spline
     void addKnot(float knot);
     bool removeKnot(uint position);
+
+    //initialize knots from initial control points
     void createKnots();
 
 protected:
     vector<Vector2f> m_controlPoints;
     vector<float> m_knots;
     uint m_order;
-
-    GLuint m_circleList;
 };
 
 #endif // BSPLINE_H

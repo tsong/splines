@@ -19,32 +19,6 @@ float deBoorCox(const vector<float> &u, uint i, uint k, float t) {
     return a*N1 + b*N2;
 }
 
-void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uint order) {
-    const vector<float> &u = knots;
-    uint k = order;
-    uint n = points.size();
-
-    //draw each segment
-    glBegin(GL_LINE_STRIP);
-    for (uint i = 0; i + k-1 < n; i++) {
-        float t = u[i + k - 1];
-        while (t <= u[i + k]) { //go from u[x] to u[x + 1] where x is the current knot
-            Vector2f p(0,0);
-            for (uint j = 0; j < k; j++) {
-                float res = deBoorCox(u, i+j, k, t);
-
-                p[0] += points[i+j].get(0)*res;
-                p[1] += points[i+j].get(1)*res;
-            }
-
-            glVertex2f(p[0],p[1]);
-            t += PARAMETER_STEP;
-        }
-    }
-    glEnd();
-}
-
-
 BSpline::BSpline(uint order)
     : m_order(order)
 {
@@ -72,6 +46,7 @@ void BSpline::glDrawControlPoints(int selectedIndex) {
 }
 
 void BSpline::glDrawControlLines() {
+    glColor3f(0,0,0);
     glEnable(GL_LINE_STIPPLE);
     glLineStipple(1,0x1111);
     glBegin(GL_LINE_STRIP);
@@ -83,11 +58,42 @@ void BSpline::glDrawControlLines() {
     glDisable(GL_LINE_STIPPLE);
 }
 
-void BSpline::glDrawCurve() {
-    drawBSpline(m_controlPoints, m_knots, m_order);
+void BSpline::glDrawCurve(bool showSegments) {
+    glColor3f(0,0,0);
+    const vector<float> &u = m_knots;
+    uint k = m_order;
+    uint n = m_controlPoints.size();
+
+    //draw each segment
+    glBegin(GL_LINE_STRIP);
+    for (uint i = 0; i + k-1 < n; i++) {
+        //use a pseudo random color to show each segment
+        if (showSegments) {
+            Vector3f color = randColor3f(i);
+            glColor3f(color[0], color[1], color[2]);
+        }
+
+        float t = u[i + k - 1];
+        //go from u[x] to u[x + 1] where x is the current knot
+        while (t <= u[i + k]) {
+            Vector2f p(0,0);
+            //blend the control points with each basis function
+            for (uint j = 0; j < k; j++) {
+                float res = deBoorCox(u, i+j, k, t);
+
+                p[0] += m_controlPoints[i+j].get(0)*res;
+                p[1] += m_controlPoints[i+j].get(1)*res;
+            }
+
+            //draw point and advance the parameter
+            glVertex2f(p[0],p[1]);
+            t += PARAMETER_STEP;
+        }
+    }
+    glEnd();
 }
 
-void BSpline::glDrawBasis() {
+void BSpline::glDrawBasis(bool showSegments) {
     if (m_knots.size() < m_order) return;
 
     //bounds of the parametric space
@@ -98,13 +104,28 @@ void BSpline::glDrawBasis() {
     for (uint i = 0; i < m_knots.size() - m_order; i++) {
         float t = m_knots[i];
 
+        //set initial segment and segment color
+        uint segment = i;
+        Vector3f color = showSegments ? randColor3f(segment) : Vector3f(1,0,0);
+
         glBegin(GL_LINE_STRIP);
         while (t <= m_knots[i+m_order]) {
+            //check what segment we are currently in and update color
+            if (showSegments) {
+                if (t >= m_knots[segment+1]) {
+                    segment++;
+                    color = randColor3f(segment);
+                }
+            }
+
+            //update the color
             if (t >= lowerBound && t <= upperBound) {
-                glColor3f(1,0,0);
+                glColor3f(color[0],color[1],color[2]);
             } else {
                 glColor3f(1,1,1);
             }
+
+            //draw point and advance parameter
             glVertex2f(t, deBoorCox(m_knots, i, m_order, t));
             t += PARAMETER_STEP;
         }
@@ -113,8 +134,6 @@ void BSpline::glDrawBasis() {
         glColor3f(1,1,1);
     }
 }
-
-
 
 void BSpline::setOrder(uint order) {
     if (order > 0) {
@@ -210,6 +229,8 @@ uint BSpline::numberOfKnots() {
 void BSpline::createKnots() {
     m_knots.clear();
 
+    //initialize with n+k knots, where n is the number
+    //of control points and k is the order
     if (m_controlPoints.size() > 0) {
         for (uint i = 0; i < m_controlPoints.size() + m_order; i++) {
             m_knots.push_back(i);

@@ -101,6 +101,7 @@ public:
         return c;
     }
 
+    //const accessor
     T get(uint i) const {
         if (i < N)
             return data[i];

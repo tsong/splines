@@ -3,6 +3,18 @@
 
 #define PARAMETER_STEP 1E-2
 
+Vector3f randColor3f(uint seed) {
+    srand(seed*3 + 2);
+    Vector3f color;
+
+    //generate three color components
+    for (uint i = 0; i < 3; i++)
+        color[i] = static_cast<float>(rand()) / RAND_MAX;
+
+    srand(1);
+    return color;
+}
+
 void glDrawCircle(float x, float y, float r) {
     //translate to x,y
     glPushMatrix();
