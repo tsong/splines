@@ -13,11 +13,8 @@ using namespace std;
 //draws a circle at (x,y) with radius r using OpenGL
 void glDrawCircle(float x, float y, float r);
 
-//draws a B spline with
-void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uint order);
-
-float deBoorCox(const vector<float> &u, uint i, uint k, float t);
-
+//creates and returns a display list of a circle with radius r
+GLuint glCircleList(float r);
 
 
 #endif // GLUTILS_H

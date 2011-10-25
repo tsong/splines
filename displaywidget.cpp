@@ -57,7 +57,7 @@ void DisplayWidget::paintGL() {
     glLoadIdentity();
 
     if (m_showControlPoints) {
-        m_spline->glDrawControlPoints();
+        m_spline->glDrawControlPoints(m_selected ? m_selectedIndex : -1);
     }
 
     if (m_showControlLines) {

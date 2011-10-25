@@ -4,6 +4,7 @@ SetOrderCommand::SetOrderCommand(uint order, BSpline &spline, QUndoCommand *pare
     : QUndoCommand(parent), m_spline(spline), m_order(order)
 {
     m_originalOrder = m_spline.getOrder();
+    m_originalKnots = m_spline.getKnots();
 }
 
 SetOrderCommand::~SetOrderCommand() {}
@@ -22,5 +23,6 @@ void SetOrderCommand::redo() {
 
 void SetOrderCommand::undo() {
     m_spline.setOrder(m_originalOrder);
+    m_spline.setKnots(m_originalKnots);
 }
 

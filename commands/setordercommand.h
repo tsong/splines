@@ -2,6 +2,7 @@
 #define SETORDERCOMMAND_H
 
 #include <QUndoCommand>
+#include <vector>
 #include "bspline.h"
 
 #define SET_ORDER_COMMAND_ID 0xFF06
@@ -23,6 +24,7 @@ protected:
     BSpline &m_spline;
     uint m_order;
     uint m_originalOrder;
+    vector<float> m_originalKnots;
 
 };
 #endif // SETORDERCOMMAND_H

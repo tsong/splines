@@ -79,11 +79,17 @@ void MainWindow::createMenus() {
 
     //order menu
     QMenu *orderMenu = menuBar()->addMenu("&Order");
+    QActionGroup *actionGroup = new QActionGroup(this);
     for (uint i = 2; i < 7; i++) {
         OrderAction *orderAction = new OrderAction(i, QString("&%1").arg(i), this);
         connect(orderAction, SIGNAL(triggered(uint)), this, SLOT(setOrder(uint)));
         orderAction->setShortcut(QString("Ctrl+%1").arg(i));
+        orderAction->setCheckable(true);
+        orderAction->setActionGroup(actionGroup);
         orderMenu->addAction(orderAction);
+
+        if (i == 3)
+            orderAction->setChecked(true);
     }
 }
 

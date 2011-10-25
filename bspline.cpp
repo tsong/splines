@@ -2,7 +2,48 @@
 #include "QGLWidget"
 #include "utils/glutils.h"
 
-#define TIME_STEP 1E-3
+#define CONTROL_POINT_RADIUS 6
+#define PARAMETER_STEP 1E-3
+
+float deBoorCox(const vector<float> &u, uint i, uint k, float t) {
+    if (k == 1) {
+        return t >= u[i] && t < u[i+1] ? 1 : 0; //strict lower bound???
+    }
+
+    float N1 = deBoorCox(u, i,k-1,t);
+    float N2 = deBoorCox(u, i+1,k-1,t);
+
+    float a = u[i+k-1] - u[i] != 0 ? (t-u[i])/(u[i+k-1]-u[i]) : 0;
+    float b = u[i+k] - u[i+1] != 0 ? (u[i+k]-t)/(u[i+k]-u[i+1]) : 0;
+
+    return a*N1 + b*N2;
+}
+
+void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uint order) {
+    const vector<float> &u = knots;
+    uint k = order;
+    uint n = points.size();
+
+    //draw each segment
+    glBegin(GL_LINE_STRIP);
+    for (uint i = 0; i + k-1 < n; i++) {
+        float t = u[i + k - 1];
+        while (t <= u[i + k]) { //go from u[x] to u[x + 1] where x is the current knot
+            Vector2f p(0,0);
+            for (uint j = 0; j < k; j++) {
+                float res = deBoorCox(u, i+j, k, t);
+
+                p[0] += points[i+j].get(0)*res;
+                p[1] += points[i+j].get(1)*res;
+            }
+
+            glVertex2f(p[0],p[1]);
+            t += PARAMETER_STEP;
+        }
+    }
+    glEnd();
+}
+
 
 BSpline::BSpline(uint order)
     : m_order(order)
@@ -14,17 +55,18 @@ BSpline::~BSpline() {}
 
 void BSpline::glDrawControlPoints(int selectedIndex) {
     bool isSelected = selectedIndex > 0 && selectedIndex < static_cast<int>(numberOfPoints());
+    uint index = static_cast<uint>(selectedIndex);
 
     //draw control points
     glColor3f(0,0,0);
     for (uint i = 0; i < m_controlPoints.size(); i++) {
         Vector2f v = m_controlPoints[i];
-        if (isSelected && static_cast<uint>(selectedIndex) == i) {
+        if (isSelected && index == i) {
             glColor3f(1,0,0);
-            glDrawCircle(v[0], v[1], 5);
+            glDrawCircle(v[0], v[1], CONTROL_POINT_RADIUS);
             glColor3f(0,0,0);
         } else {
-            glDrawCircle(v[0], v[1], 5);
+            glDrawCircle(v[0], v[1], CONTROL_POINT_RADIUS);
         }
     }
 }
@@ -64,7 +106,7 @@ void BSpline::glDrawBasis() {
                 glColor3f(1,1,1);
             }
             glVertex2f(t, deBoorCox(m_knots, i, m_order, t));
-            t += TIME_STEP;
+            t += PARAMETER_STEP;
         }
         glEnd();
 
@@ -75,8 +117,10 @@ void BSpline::glDrawBasis() {
 
 
 void BSpline::setOrder(uint order) {
-    if (order > 0)
+    if (order > 0) {
         m_order = order;
+        createKnots();
+    }
 }
 
 uint BSpline::getOrder() {
@@ -97,13 +141,16 @@ void BSpline::insertPoint(uint i, Vector2f point) {
     if (numberOfKnots() > 0) {
         addKnot(m_knots.back()+1);
     } else {
-        createKnots(m_controlPoints);
+        createKnots();
     }
 }
 
 void BSpline::deletePoint(uint i) {
     m_controlPoints.erase(m_controlPoints.begin() + i);
-    removeKnot(m_knots.size()-1);
+    if (numberOfPoints() > 0)
+        removeKnot(m_knots.size()-1);
+    else
+        m_knots.clear();
 }
 
 void BSpline::movePoint(uint i, Vector2f point) {
@@ -112,13 +159,13 @@ void BSpline::movePoint(uint i, Vector2f point) {
 
 void BSpline::clearAllPoints() {
     m_controlPoints.clear();
-    createKnots(m_controlPoints);
+    createKnots();
 
 }
 
 void BSpline::setPoints(vector<Vector2f> points) {
     m_controlPoints = points;
-    createKnots(m_controlPoints);
+    createKnots();
 }
 
 uint BSpline::numberOfPoints() {
@@ -160,11 +207,11 @@ uint BSpline::numberOfKnots() {
 }
 
 
-void BSpline::createKnots(const vector<Vector2f> &controlPoints) {
+void BSpline::createKnots() {
     m_knots.clear();
 
-    if (controlPoints.size() > 0) {
-        for (uint i = 0; i < controlPoints.size() + m_order; i++) {
+    if (m_controlPoints.size() > 0) {
+        for (uint i = 0; i < m_controlPoints.size() + m_order; i++) {
             m_knots.push_back(i);
         }
     }

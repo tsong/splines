@@ -2,6 +2,7 @@
 #define BSPLINE_H
 
 #include <vector>
+#include <QGLWidget>
 #include "utils/vector.h"
 
 using namespace std;
@@ -39,12 +40,14 @@ public:
 protected:
     void addKnot(float knot);
     bool removeKnot(uint position);
-    void createKnots(const vector<Vector2f> &controlPoints);
+    void createKnots();
 
 protected:
     vector<Vector2f> m_controlPoints;
     vector<float> m_knots;
     uint m_order;
+
+    GLuint m_circleList;
 };
 
 #endif // BSPLINE_H
