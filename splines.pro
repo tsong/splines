@@ -15,13 +15,13 @@ SOURCES += main.cpp\
     displaywidget.cpp \
     glutils.cpp \
     pointsutil.cpp \
-    addpointcommand.cpp \
-    deletepointcommand.cpp \
-    clearcommand.cpp \
-    movepointcommand.cpp \
     basiswidget.cpp \
     orderaction.cpp \
-    togglecommand.cpp
+    commands/addpointcommand.cpp \
+    commands/deletepointcommand.cpp \
+    commands/clearcommand.cpp \
+    commands/movepointcommand.cpp \
+    commands/togglecommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -29,13 +29,13 @@ HEADERS  += mainwindow.h \
     vector.h \
     glutils.h \
     pointsutil.h \
-    addpointcommand.h \
-    deletepointcommand.h \
-    clearcommand.h \
-    movepointcommand.h \
     basiswidget.h \
     orderaction.h \
-    togglecommand.h
+    commands/addpointcommand.h \
+    commands/deletepointcommand.h \
+    commands/clearcommand.h \
+    commands/movepointcommand.h \
+    commands/togglecommand.h
 
 FORMS    +=
 

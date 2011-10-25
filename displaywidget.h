@@ -7,11 +7,11 @@
 
 #include "vector.h"
 
-#include "addpointcommand.h"
-#include "deletepointcommand.h"
-#include "movepointcommand.h"
-#include "clearcommand.h"
-#include "togglecommand.h"
+#include "commands/addpointcommand.h"
+#include "commands/deletepointcommand.h"
+#include "commands/movepointcommand.h"
+#include "commands/clearcommand.h"
+#include "commands/togglecommand.h"
 
 #define POINT_RADIUS 6
 
