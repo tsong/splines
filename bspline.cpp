@@ -106,7 +106,7 @@ void BSpline::glDrawBasis(bool showSegments) {
 
         //set initial segment and segment color
         uint segment = i;
-        Vector3f color = showSegments ? randColor3f(segment) : Vector3f(1,0,0);
+        Vector3f color = showSegments ? randColor3f(segment-m_order+1) : Vector3f(1,0,0);
 
         glBegin(GL_LINE_STRIP);
         while (t <= m_knots[i+m_order]) {
@@ -114,7 +114,7 @@ void BSpline::glDrawBasis(bool showSegments) {
             if (showSegments) {
                 if (t >= m_knots[segment+1]) {
                     segment++;
-                    color = randColor3f(segment);
+                    color = randColor3f(segment-m_order+1);
                 }
             }
 
