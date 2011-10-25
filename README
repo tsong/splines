@@ -23,7 +23,18 @@ functions.
 Left click on the canvas to add a new vertex.
 Left click and drag a vertex to move it.
 Right click on a vertex to delete it.
-The canvas can be cleared using the "Clear" menu item under "Edit".
+The canvas can be cleared using the "Clear" menu item under the "Edit" menu.
+
+The visibility of control points and control lines can be toggled under the "Show" menu.
+    -note that if control points are not visible, you can't control or add new control points
+
+Use the undo and redo commands under the "Edit" menu to undo and redo actions.
+Use the "Order" menu to change the order of the B Spline basis functions
+
+Drag the arrows beneath each knot in the parametric space to move the corresponding knot.
+If the knots multiplicity is greater than 1:
+    -left clicking drags the left most knot
+    -right clicking drags the right most knot
 
 ===================
      Build

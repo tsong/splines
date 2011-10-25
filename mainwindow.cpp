@@ -57,6 +57,22 @@ void MainWindow::createMenus() {
     redoAction->setShortcut(QKeySequence("Shift+Ctrl+Z"));
     editMenu->addAction(redoAction);
 
+    //view menu
+    QMenu *showMenu = menuBar()->addMenu("&Show");
+    QAction *showPointsAction = new QAction("&Show Control Points", this);
+    showPointsAction->setShortcut(QKeySequence("Shift+Ctrl+P"));
+    showPointsAction->setCheckable(true);
+    showPointsAction->setChecked(true);
+    connect(showPointsAction, SIGNAL(triggered()), displayWidget, SLOT(toggleShowControlPoints()));
+    showMenu->addAction(showPointsAction);
+
+    QAction *showLinesAction = new QAction("&Show Control Lines", this);
+    showLinesAction->setShortcut(QKeySequence("Shift+Ctrl+L"));
+    showLinesAction->setCheckable(true);
+    showLinesAction->setChecked(true);
+    connect(showLinesAction, SIGNAL(triggered()), displayWidget, SLOT(toggleShowControlLines()));
+    showMenu->addAction(showLinesAction);
+
     //order menu
     QMenu *orderMenu = menuBar()->addMenu("&Order");
     for (uint i = 2; i < 7; i++) {

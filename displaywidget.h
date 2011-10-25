@@ -11,6 +11,7 @@
 #include "deletepointcommand.h"
 #include "movepointcommand.h"
 #include "clearcommand.h"
+#include "togglecommand.h"
 
 #define POINT_RADIUS 6
 
@@ -28,6 +29,7 @@ public:
     friend class DeletePointCommand;
     friend class MovePointCommand;
     friend class ClearCommand;
+    friend class ToggleCommand;
 
 signals:
     void pointsChanged(const vector<Vector2f> &points);
@@ -38,6 +40,8 @@ public slots:
 
     void setKnots(const vector<float> &knots);
     void setOrder(uint order);
+    void toggleShowControlPoints();
+    void toggleShowControlLines();
 
 protected:
     /*OpenGL events*/

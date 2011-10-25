@@ -29,7 +29,7 @@ void DisplayWidget::initializeGL() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glLineWidth(0.75);
+    glLineWidth(1.25);
 
 }
 
@@ -82,6 +82,9 @@ void DisplayWidget::paintGL() {
 }
 
 void DisplayWidget::mousePressEvent(QMouseEvent *event) {
+    if (!m_showControlPoints)
+        return;
+
     float x = (float)event->x();
     float y = (float)event->y();
 
@@ -181,5 +184,13 @@ void DisplayWidget::setPoints(vector<Vector2f> points) {
 
 uint DisplayWidget::numberOfPoints() {
     return m_controlPoints.size();
+}
+
+void DisplayWidget::DisplayWidget::toggleShowControlPoints() {
+    m_undoStack->push(new ToggleCommand(*this, m_showControlPoints));
+}
+
+void DisplayWidget::toggleShowControlLines() {
+    m_undoStack->push(new ToggleCommand(*this, m_showControlLines));
 }
 

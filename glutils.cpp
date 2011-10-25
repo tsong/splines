@@ -1,7 +1,7 @@
 #include "glutils.h"
 #include "vector.h"
 
-#define TIME_STEP 5E-3
+#define PARAMETER_STEP 1E-2
 
 void glDrawCircle(float x, float y, float r) {
     //translate to x,y
@@ -32,9 +32,8 @@ void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uin
     uint n = points.size();
 
     //draw each segment
+    glBegin(GL_LINE_STRIP);
     for (uint i = 0; i + k-1 < n; i++) {
-        glBegin(GL_LINE_STRIP);
-
         float t = u[i + k - 1];
         while (t <= u[i + k]) { //go from u[x] to u[x + 1] where x is the current knot
             Vector2f p(0,0);
@@ -46,10 +45,10 @@ void drawBSpline(const vector<Vector2f> &points, const vector<float> &knots, uin
             }
 
             glVertex2f(p[0],p[1]);
-            t += TIME_STEP;
+            t += PARAMETER_STEP;
         }
-        glEnd();
     }
+    glEnd();
 }
 
 float deBoorCox(const vector<float> &u, uint i, uint k, float t) {

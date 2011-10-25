@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     clearcommand.cpp \
     movepointcommand.cpp \
     basiswidget.cpp \
-    orderaction.cpp
+    orderaction.cpp \
+    togglecommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     clearcommand.h \
     movepointcommand.h \
     basiswidget.h \
-    orderaction.h
+    orderaction.h \
+    togglecommand.h
 
 FORMS    +=
 

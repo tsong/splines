@@ -86,9 +86,8 @@ void BasisWidget::paintGL() {
         glEnd();
 
         if (multiplicity > 0) {
-            glColor3f(0,0,0);
-            //renderText(m_knots[i] - CONTROL_LENGTH + CONTROL_LENGTH/2, PADDING, 0, "99", QFont("Monospace"));
-            renderText(v2[0] + CONTROL_LENGTH/2, v2[1], 0, "99", QFont("Monospace"));
+            glColor3f(1,0,0);
+            renderText(v2[0], v2[1] + PADDING, 0, QString("%1").arg(multiplicity), QFont("Monospace"));
         }
 
         glColor3f(1,1,1);
