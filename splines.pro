@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     commands/togglecommand.cpp \
     bspline.cpp \
     commands/moveknotcommand.cpp \
-    commands/setordercommand.cpp
+    commands/setordercommand.cpp \
+    commands/resetknotscommand.cpp
 
 HEADERS  += mainwindow.h \
     displaywidget.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     commands/togglecommand.h \
     bspline.h \
     commands/moveknotcommand.h \
-    commands/setordercommand.h
+    commands/setordercommand.h \
+    commands/resetknotscommand.h
 
 FORMS    +=
 

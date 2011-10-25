@@ -2,6 +2,7 @@
 #include "utils/glutils.h"
 #include "utils/pointutils.h"
 #include "commands/moveknotcommand.h"
+#include "commands/resetknotscommand.h"
 #include <QDebug>
 
 #define CONTROL_LENGTH 0.13
@@ -88,6 +89,10 @@ void BasisWidget::paintGL() {
     //translate and draw basis functions
     glTranslatef(0, 2*PADDING + CONTROL_LENGTH, 0);
     m_spline->glDrawBasis();
+}
+
+void BasisWidget::reset() {
+    m_undoStack->push(new ResetKnotsCommand(*m_spline));
 }
 
 void BasisWidget::convertCoordinates(float xIn, float yIn, float &xOut, float &yOut) {
@@ -191,4 +196,5 @@ void BasisWidget::getControlTriangle(uint i, Vector2f &v1, Vector2f &v2, Vector2
     v2 = Vector2f(knot + CONTROL_LENGTH, PADDING);
     v3 = Vector2f(knot - CONTROL_LENGTH, PADDING);
 }
+
 

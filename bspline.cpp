@@ -137,6 +137,12 @@ bool BSpline::removeKnot(uint position) {
     return true;
 }
 
+void BSpline::resetKnots() {
+    for (uint i = 0; i < m_knots.size(); i++) {
+        m_knots[i] = i;
+    }
+}
+
 const vector<float>& BSpline::getKnots() {
     return m_knots;
 }

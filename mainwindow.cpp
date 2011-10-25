@@ -42,10 +42,16 @@ void MainWindow::createMenus() {
 
     //edit menu
     QMenu *editMenu = menuBar()->addMenu("&Edit");
+
     QAction *clearAction = new QAction("&Clear", this);
     clearAction->setShortcut(QKeySequence("Ctrl+C"));
     connect(clearAction, SIGNAL(triggered()), m_displayWidget, SLOT(clear()));
     editMenu->addAction(clearAction);
+
+    QAction *resetBasisAction = new QAction("Reset &Knots", this);
+    resetBasisAction->setShortcut(QKeySequence("Ctrl+K"));
+    connect(resetBasisAction, SIGNAL(triggered()), m_basisWidget, SLOT(reset()));
+    editMenu->addAction(resetBasisAction);
 
     QAction *undoAction = m_undoStack->createUndoAction(this);
     undoAction->setShortcut(QKeySequence("Ctrl+Z"));

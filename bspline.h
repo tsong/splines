@@ -19,12 +19,16 @@ public:
     void setPoints(vector<Vector2f> points);
     uint numberOfPoints();
 
-    void setOrder(uint order);
-    uint getOrder();
+    /*knots methods*/
     const vector<float>& getKnots();
     void setKnots(const vector<float> &knots);
     bool moveKnot(uint position, float newKnot);
+    void resetKnots();
     uint numberOfKnots();
+
+    /*order methods*/
+    void setOrder(uint order);
+    uint getOrder();
 
     /*OpenGL draw methods*/
     void glDrawControlPoints(int selectedIndex = -1);

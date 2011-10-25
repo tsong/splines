@@ -8,8 +8,6 @@
 
 using namespace std;
 
-class DisplayWidget;
-
 class SetOrderCommand : public QUndoCommand {
 
 public:

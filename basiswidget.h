@@ -27,6 +27,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
+public slots:
+    void reset();
+
 protected:
     void convertCoordinates(float xIn, float yIn, float &xOut, float &yOut);
     void getControlTriangle(uint i, Vector2f &v1, Vector2f &v2, Vector2f &v3);

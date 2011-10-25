@@ -9,8 +9,6 @@
 
 using namespace std;
 
-class DisplayWidget;
-
 class AddPointCommand : public QUndoCommand {
 
 public:

@@ -9,8 +9,6 @@
 
 using namespace std;
 
-class DisplayWidget;
-
 class ClearCommand : public QUndoCommand {
 
 public:
@@ -26,7 +24,6 @@ protected:
     vector<float> m_originalKnots;
     vector<Vector2f> m_originalPoints;
     BSpline &m_spline;
-
 };
 
 #endif // CLEARCOMMAND_H

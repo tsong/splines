@@ -11,8 +11,6 @@
 
 using namespace std;
 
-class DisplayWidget;
-
 class DeletePointCommand : public QUndoCommand {
 
 public:

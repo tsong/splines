@@ -7,8 +7,6 @@
 
 using namespace std;
 
-class DisplayWidget;
-
 class MoveKnotCommand : public QUndoCommand {
 
 public:
